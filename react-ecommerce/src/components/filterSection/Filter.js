@@ -8,14 +8,15 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from '@mui/material/Button'
 
+const priceFilter = [
+  { title: "0-100", symbol: "Rs" },
+  { title: "100-500", symbol: "Rs" },
+  { title: "500-1000", symbol: "Rs" },
+  { title: "500-1000", symbol: "Rs" },
+  { title: "500-1000", symbol: "Rs" },
+];
+
 const Filter = () => {
-  const priceFilter = [
-    { title: "0-100", symbol: "Rs" },
-    { title: "100-500", symbol: "Rs" },
-    { title: "500-1000", symbol: "Rs" },
-    { title: "500-1000", symbol: "Rs" },
-    { title: "500-1000", symbol: "Rs" },
-  ];
 
   const categoryFilter = [{title:'Shirt',symbol:''},{title:'Shoes',symbol:''},{title:'Jeans',symbol:''}]
   const renderFilter = (filter, type) => (
