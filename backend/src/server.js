@@ -8,6 +8,6 @@ dotenev.config();
 const port = process.env.PORT_NUMBER || 8000;
 
 app.listen(port,async ()=>{
-    console.log('listening to port hello guys',port);
+    console.log('Hello I am server and I am running well and good',port);
      await connect();
 })

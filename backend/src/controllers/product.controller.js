@@ -1,13 +1,18 @@
 const express = require("express");
 const Product = require("../models/product.model");
+const ControllerHelpers = require("./helpers.controllers")
 const router = express.Router();
 
 router.get("/all-product", async (req, res) => {
   try {
     const products = await Product.find();
-    res.status(200).send({ status: 200, products });
+    const categories = await Product.distinct('category');
+
+    const productMap = await ControllerHelpers.getAllProductMap(categories,Product);
+ 
+    res.status(200).send({ status: 200, products,categories,productMap });
   } catch (err) {
-    res.status(500).send({ status: 500, message: err });
+    res.status(500).send({ status: 500, message: err,hello:'good' });
   }
 });
 

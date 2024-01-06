@@ -17,8 +17,7 @@ const [products,setProducts] = useState([]);
 const getProduct = async()=>{
   try{
     const res = await axios.get("http://localhost:8000/all-product");
-     setProducts(res.data.products)
-     console.log(res)
+     setProducts(res.data)
   }
   catch(err){
     console.log(err)
@@ -28,15 +27,10 @@ const getProduct = async()=>{
 useEffect(()=>{
   getProduct();
 },[])
-  const section = [
-    { section: "Shirt Section",item:[1, 2, 3, 4] },
-    { section: "Jeans Section",item:[1] },
-  ];
 
-  //shirt => shirt , item = {name,size,rating,price,category,}
-
-  const renderSubSection = (item) => (
-    <>
+  const renderSubSection = (category) => {
+    console.log(category,products)
+  return  <>
       <Stack
         spacing={2}
         direction="row"
@@ -44,12 +38,12 @@ useEffect(()=>{
         flexWrap="wrap"
         sx={{ marginTop: 2 }}
       >
-        {_map(item, (itemData) => (
+        {_map(products?.productMap?.[category], (itemData) => (
           <MyCard {...itemData}/>
         ))}
       </Stack>
     </>
-  );
+  };
   return (
     <>
       <Navbar />
@@ -57,10 +51,10 @@ useEffect(()=>{
       <Stack spacing={2} direction='row'>
         <Filter />
         <Stack>
-        {_map(section, ({ section }) => (
+        {_map(products?.categories, (category) => (
           <>
-            <Typography>{section}</Typography>
-            {renderSubSection(products)}
+            <Typography>{category}</Typography>
+            {renderSubSection(category)}
           </>
         ))}
         </Stack>
