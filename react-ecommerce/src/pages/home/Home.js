@@ -91,7 +91,7 @@ const handleSectionFilterSelect = useCallback((data)=>{
 
   return (
     <>
-    <div style={{ height: '100vh', overflow: 'hidden' }}>
+    <div style={{ height: '100vh' }}>
       <Navbar />
       <ReactSlider/>
       <Stack spacing={2} direction='row' style={{height:'100%'}}>
