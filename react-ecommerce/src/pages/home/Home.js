@@ -9,10 +9,10 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import CircularProgress from '@mui/material/CircularProgress';
 
-import Navbar from "../components/navbar/Navbar";
-import MyCard from "../molecules/card/Card";
-import Filter from "../components/filterSection/Filter";
-import ReactSlider from "../components/reactSlider/ReactSlider";
+import Navbar from "../../components/navbar/Navbar";
+import MyCard from "../../molecules/card/Card";
+import Filter from "../../components/filterSection/Filter";
+import ReactSlider from "../../components/reactSlider/ReactSlider";
 import { categoryFilterConfig, priceFilterConfig, ratingFilterConfig } from './home.config';
 import { makeFilterPayload } from './home.factory';
 
@@ -26,7 +26,7 @@ const [selectedFilterConfig, setSelectedFilterConfig] = useState({
 });
 
 
-const getProduct = async()=>{
+const getProduct = useCallback(async()=>{
   try{
     setIsFetching(true)
     const res = await axios.get("http://localhost:8000/all-product");
@@ -37,7 +37,7 @@ const getProduct = async()=>{
   }finally{
     setIsFetching(false)
   }
-}
+},[])
 
 useEffect(()=>{
   getProduct();
@@ -45,12 +45,14 @@ useEffect(()=>{
 
 const handleFilter= useCallback(async()=>{
 try{
-
    setIsFetching(true)
     const payload = makeFilterPayload(selectedFilterConfig);
     if(_size(payload)>0){
       const response = await axios.post("http://localhost:8000/product/filter",{filters:payload});
       setProducts(response?.data)
+    }
+    else{
+      getProduct();
     }
   }
   catch(err){
@@ -59,7 +61,7 @@ try{
   finally{
     setIsFetching(false)
   }
-},[selectedFilterConfig])
+},[selectedFilterConfig,getProduct])
 
 const handleSectionFilterSelect = useCallback((data)=>{
   setSelectedFilterConfig(data)
@@ -89,14 +91,16 @@ const handleSectionFilterSelect = useCallback((data)=>{
 
   return (
     <>
+    <div style={{ height: '100vh', overflow: 'hidden' }}>
       <Navbar />
       <ReactSlider/>
-      <Stack spacing={2} direction='row'>
-        <Filter 
+      <Stack spacing={2} direction='row' style={{height:'100%'}}>
+       <Filter 
         handleFilter={handleFilter}
          selectedFilterConfig={selectedFilterConfig}
          handleSectionFilterSelect={handleSectionFilterSelect}
          />
+         <div style={{height:"100%",overflowY: 'auto'}}>
         <Stack>
         {_map(products?.categories, (category) => (
           <>
@@ -105,7 +109,9 @@ const handleSectionFilterSelect = useCallback((data)=>{
           </>
         ))}
         </Stack>
+        </div>
       </Stack>
+      </div>
     </>
   );
 };

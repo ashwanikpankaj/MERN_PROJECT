@@ -1,6 +1,5 @@
-
 import _map from "lodash/map";
-import _capitalize from 'lodash/capitalize';
+import _capitalize from "lodash/capitalize";
 
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -9,10 +8,11 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-
-
-const Filter = ({handleFilter,selectedFilterConfig,handleSectionFilterSelect}) => {
-
+const Filter = ({
+  handleFilter,
+  selectedFilterConfig,
+  handleSectionFilterSelect,
+}) => {
   const handleFilterClick = ({ filter, key, title, event }) => {
     const updateSelectedFilter = _map(filter, (item) => {
       if (item?.title === title) {
@@ -20,23 +20,20 @@ const Filter = ({handleFilter,selectedFilterConfig,handleSectionFilterSelect}) =
       }
       return { ...item };
     });
-    // setSelectedFilterConfig({
-    //   ...selectedFilterConfig,
-    //   [key]: updateSelectedFilter,
-    // });
-    handleSectionFilterSelect({  
+
+    handleSectionFilterSelect({
       ...selectedFilterConfig,
       [key]: updateSelectedFilter,
-    })
+    });
   };
 
-  const handleApplyFilter = async()=>{
-  handleFilter()
-  }
+  const handleApplyFilter = async () => {
+    handleFilter();
+  };
   const renderFilter = () => {
     return (
       <>
-        {_map(selectedFilterConfig, (item,index) => (
+        {_map(selectedFilterConfig, (item, index) => (
           <>
             <Typography variant="h6" sx={{ color: "#1976d2" }}>
               {_capitalize(index)}
@@ -47,7 +44,13 @@ const Filter = ({handleFilter,selectedFilterConfig,handleSectionFilterSelect}) =
                 <Stack direction="row" key={`${index}_${symbol}`}>
                   <Checkbox
                     onChange={(event) =>
-                      handleFilterClick({ filter:item, key, value, title, event })
+                      handleFilterClick({
+                        filter: item,
+                        key,
+                        value,
+                        title,
+                        event,
+                      })
                     }
                     checked={isChecked}
                   />
@@ -65,10 +68,26 @@ const Filter = ({handleFilter,selectedFilterConfig,handleSectionFilterSelect}) =
   };
 
   return (
-    <div style={{ marginLeft: "20px" }}>
-      <Button onClick={handleApplyFilter}>Apply Selected Filter</Button>
-      <Box sx={{ width: "200px" }}>{renderFilter()}</Box>
-    </div>
+    <>
+      <Stack direction="column" style={{ height: "100%",marginTop:'10px'}}>
+        <Button
+          onClick={handleApplyFilter}
+          variant="contained"
+          color="error"
+          size="large"
+        >
+          Apply Filter
+        </Button>
+        <div
+          style={{
+            height: "500px",
+            overflowY: "auto",
+          }}
+        >
+          <Box sx={{ width: "200px" }}>{renderFilter()}</Box>
+        </div>
+      </Stack>
+    </>
   );
 };
 
