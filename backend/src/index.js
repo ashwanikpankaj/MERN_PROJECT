@@ -6,11 +6,12 @@ const cors = require('cors');
 const app = express();
 
 app.use(express.json({extended: false}));
-app.use(cors({origin: 'http://localhost:3000', credentials: true}));
+app.use(cors({origin: 'http://localhost:3001', credentials: true}));
 
  app.use("/",productController);
  app.use("/create",productController);
  app.use("/product-update",productController);
+ app.use("/product",productController)
 
 
 module.exports  = app;

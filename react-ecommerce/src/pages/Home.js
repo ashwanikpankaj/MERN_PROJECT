@@ -1,26 +1,41 @@
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useCallback} from 'react';
 import axios from 'axios'
 
 import _map from "lodash/map";
+import _get from 'lodash/get';
+import _size from 'lodash/size';
 
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Navbar from "../components/navbar/Navbar";
 import MyCard from "../molecules/card/Card";
 import Filter from "../components/filterSection/Filter";
 import ReactSlider from "../components/reactSlider/ReactSlider";
+import { categoryFilterConfig, priceFilterConfig, ratingFilterConfig } from './home.config';
+import { makeFilterPayload } from './home.factory';
 
 const Home = () => {
 const [products,setProducts] = useState([]);
+const [isFetching ,setIsFetching] = useState(false)
+const [selectedFilterConfig, setSelectedFilterConfig] = useState({
+  price: priceFilterConfig,
+  category: categoryFilterConfig,
+  rating: ratingFilterConfig,
+});
+
 
 const getProduct = async()=>{
   try{
+    setIsFetching(true)
     const res = await axios.get("http://localhost:8000/all-product");
      setProducts(res.data)
   }
   catch(err){
     console.log(err)
+  }finally{
+    setIsFetching(false)
   }
 }
 
@@ -28,8 +43,30 @@ useEffect(()=>{
   getProduct();
 },[])
 
+const handleFilter= useCallback(async()=>{
+try{
+
+   setIsFetching(true)
+    const payload = makeFilterPayload(selectedFilterConfig);
+    if(_size(payload)>0){
+      const response = await axios.post("http://localhost:8000/product/filter",{filters:payload});
+      setProducts(response?.data)
+    }
+  }
+  catch(err){
+
+  }
+  finally{
+    setIsFetching(false)
+  }
+},[selectedFilterConfig])
+
+const handleSectionFilterSelect = useCallback((data)=>{
+  setSelectedFilterConfig(data)
+},[])
+
   const renderSubSection = (category) => {
-    console.log(category,products)
+   const selectedCategoryProduct = _get(products,['productMap',category],[])
   return  <>
       <Stack
         spacing={2}
@@ -38,18 +75,28 @@ useEffect(()=>{
         flexWrap="wrap"
         sx={{ marginTop: 2 }}
       >
-        {_map(products?.productMap?.[category], (itemData) => (
+        {_map(selectedCategoryProduct, (itemData) => (
           <MyCard {...itemData}/>
         ))}
       </Stack>
     </>
   };
+  if(isFetching){
+    return <div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"100vh"}}>
+      <CircularProgress/>
+    </div>
+  }
+
   return (
     <>
       <Navbar />
       <ReactSlider/>
       <Stack spacing={2} direction='row'>
-        <Filter />
+        <Filter 
+        handleFilter={handleFilter}
+         selectedFilterConfig={selectedFilterConfig}
+         handleSectionFilterSelect={handleSectionFilterSelect}
+         />
         <Stack>
         {_map(products?.categories, (category) => (
           <>
