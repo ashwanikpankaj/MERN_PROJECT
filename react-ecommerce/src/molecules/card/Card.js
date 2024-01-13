@@ -21,11 +21,11 @@ export default function MyCard({ name, price, rating, size, image }) {
 
   const renderPriceAndWishListAndAddButton = () => (
     <>
-      <Stack direction="row" spacing={3}>
+      <Stack direction="row" spacing={3} justifyContent="space-between">
         <Typography variant="h6" color="text.secondary">
           {`Rs-${price}`}
         </Typography>
-        <Button>
+        <Button variant="outlined" color="error">
           <FavoriteIcon color="error" />
         </Button>
         <Button variant="contained" color="primary">
@@ -62,8 +62,8 @@ export default function MyCard({ name, price, rating, size, image }) {
   );
 
   return (
-    <Card sx={{ minWidth: 280 }}>
-      <CardMedia sx={{ height: 500 }} image={image} />
+    <Card sx={{ minWidth: 380 }}>
+      <CardMedia sx={{ height: 380 }} image={image} />
       <CardContent>
         {renderName()}
         {renderPriceAndWishListAndAddButton()}
