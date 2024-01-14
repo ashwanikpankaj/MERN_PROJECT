@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+import {  useSelector } from "react-redux";
+import _isEmpty from "lodash/isEmpty";
+
 import { styled, alpha } from "@mui/material/styles";
+import { useCallback } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,9 +16,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-import SignUp from "../signUp";
-import { useCallback } from "react";
+import Avatar from '@mui/material/Avatar';
+import { deepOrange } from '@mui/material/colors';
+
 import Login from "../login";
+import SignUp from "../signUp";
+import { getInitials } from "../../helpers/common.helpers";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -56,35 +63,44 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar({ isLoggedIn, isSignup }) {
-  const [isSignupModal, setIsOPenSignupModal] = useState(false);
-
-  const handleProfileMenuOpen = (event) => {
-    setIsOPenSignupModal(true);
-  };
-
-
-  const handleOpenSignupModal = useCallback((value) => {
-    setIsOPenSignupModal(value);
+export default function Navbar({}) {
+  const [isOpen, setOpen] = useState(false);
+  const [openSignupModal, setOpenSignupModal] = useState(false);
+  const { user } = useSelector((state) => state?.ecommerceReducer);
+console.log(user)
+  const handleOpenModal = useCallback((value) => {
+    setOpen(value);
   }, []);
 
+  const handleOpenSignupModal = useCallback(
+    (value = true) => {
+      handleOpenModal(false);
+      setOpenSignupModal(value);
+    },
+    [handleOpenModal]
+  );
+
   const renderForm = () => {
-    return true ? (
-      <SignUp
-        handleOpenSignupModal={handleOpenSignupModal}
-        isSignupModal={isSignupModal}
-      />
-    ) : (
-      <Login
-        handleOpenSignupModal={handleOpenSignupModal}
-        isSignupModal={isSignupModal}
-      />
-      
-    );
+    if (isOpen) {
+      return (
+        <Login
+          handleOpenModal={handleOpenModal}
+          isOpen={isOpen}
+          handleOpenSignupModal={handleOpenSignupModal}
+        />
+      );
+    }
+    if (openSignupModal) {
+      return (
+        <SignUp
+          isOpen={openSignupModal}
+          handleOpenModal={handleOpenSignupModal}
+        />
+      );
+    }
   };
 
   const menuId = "primary-search-account-menu";
- 
 
   const renderRightSection = () => (
     <>
@@ -110,10 +126,11 @@ export default function Navbar({ isLoggedIn, isSignup }) {
           aria-label="account of current user"
           aria-controls={menuId}
           aria-haspopup="true"
-          onClick={handleProfileMenuOpen}
           color="inherit"
         >
-          <AccountCircle onClick = {()=>handleOpenSignupModal(true)}/>
+          {_isEmpty(user) ? 
+            <AccountCircle onClick={() => handleOpenModal(true)} />:<Avatar sx={{ bgcolor: deepOrange[500], width: 35, height: 35  }}>{getInitials(user?.name)}</Avatar>
+          }
         </IconButton>
       </Box>
     </>
@@ -151,7 +168,7 @@ export default function Navbar({ isLoggedIn, isSignup }) {
           </Search>
           {renderRightSection()}
         </Toolbar>
-        {renderForm()}
+        {_isEmpty(user) && renderForm()}
       </AppBar>
     </Box>
   );

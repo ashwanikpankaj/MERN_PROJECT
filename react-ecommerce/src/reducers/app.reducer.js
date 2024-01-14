@@ -12,12 +12,12 @@ const initialState = {
 };
 
 export const login = createAsyncThunk("login", async (payload) => {
-  const res = await axios.post(`${initURL}/login`, payload);
+  const res = await axios.post(`${initURL}/user/login`, payload);
   return res.data;
 });
 
 export const signup = createAsyncThunk("signup", async (payload) => {
-    const res = await axios.post(`${initURL}/signup`, payload);
+    const res = await axios.post(`${initURL}/user/signup`, payload);
     return res.data;
   });
 
@@ -40,10 +40,12 @@ const appReducer = createSlice({
           state.isLoading = true;
         },
         [login.fulfilled]: (state, action) => {
-          console.log(action, "action");
+          const {payload} = action;
+         state.user = payload?.user; 
         },
         [signup.fulfilled]:(state,action)=>{
-
+          const {payload} = action
+         state.user = payload?.user; 
         },
         [getProducts.fulfilled]: (state, action) => {
             const {payload} = action

@@ -5,21 +5,11 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
+import { getIsFormErrorPresent } from "./form.helpers";
+import { useState } from "react";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const FormComp = ({
-  isOPen,
   handleOpenModal,
   isName,
   isEmailId,
@@ -29,8 +19,10 @@ const FormComp = ({
   modalTitle,
   submitBtnName,
   formValue,
-  handleFormData,
-  formErrorValue
+  handleFormDataChange,
+  formErrorValue,
+  onSubmitForm,
+  resetFormValue
 }) => {
   const {
     name = "",
@@ -40,22 +32,33 @@ const FormComp = ({
     confirmPassword = "",
   } = formValue || {};
 
-  const {nameError,emailError,passwordError,confirmPasswordError,mobileError} = formErrorValue || {}
+  const {name:nameError,email:emailError,password:passwordError,confirmPassword:confirmPasswordError,mobile:mobileError} = formErrorValue || {}
+  const [fieldError,setFieldError] = useState(false)
 
   const handleChange = (event) => {
     const { value, name } = event?.target;
-    handleFormData(name, value);
+    setFieldError(false)
+    handleFormDataChange(name, value);
   };
+
+  const handleFormSubmit  = ()=>{
+    const isErrorInForm = getIsFormErrorPresent(formErrorValue)
+    console.log({isErrorInForm,formErrorValue})
+    setFieldError(true)
+    if(isErrorInForm) return;
+    onSubmitForm()
+    handleOpenModal(false)
+  }
+
+  const handleClose = ()=>{
+    handleOpenModal(false)
+    resetFormValue()
+    setFieldError(false)
+  }
 
   return (
     <div>
-      <Modal
-        open={isOPen}
-        onClose={() => handleOpenModal(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
+        <Box>
           <Stack direction="row" justifyContent="space-between">
             <Typography
               id="modal-modal-title"
@@ -71,7 +74,7 @@ const FormComp = ({
             </Typography>
             <CloseIcon
               sx={{ cursor: "pointer" }}
-              onClick={() => handleOpenModal(false)}
+              onClick={handleClose}
             />
           </Stack>
           <Stack spacing={2}>
@@ -83,8 +86,8 @@ const FormComp = ({
                 onChange={handleChange}
                 name="name"
                 value={name}
-                error={nameError}
-                helperText={nameError && "Please enter valid name"}
+                error={!!nameError && fieldError}
+                helperText={(nameError && fieldError) && "Please enter valid name"}
               />
             )}
             {isEmailId && (
@@ -95,8 +98,8 @@ const FormComp = ({
                 value={email}
                 name="email"
                 onChange={handleChange}
-                error={emailError}
-                helperText={emailError && "Please enter valid email"}
+                error={!!emailError && fieldError}
+                helperText={(emailError && fieldError) && "Please enter valid email"}
               />
             )}
             {isMobileNum && (
@@ -108,8 +111,8 @@ const FormComp = ({
                 value={mobile}
                 name="mobile"
                 onChange={handleChange}
-                error={mobileError}
-                helperText={mobileError && "Please enter valid mobile number"}
+                error={!!mobileError && fieldError}
+                helperText={(mobileError && fieldError) && "Please enter valid mobile number"}
               />
             )}
             {isPassword && (
@@ -121,8 +124,8 @@ const FormComp = ({
                 value={password}
                 name="password"
                 onChange={handleChange}
-                error={passwordError}
-                helperText={passwordError && "Please enter valid password"}
+                error={!!passwordError && fieldError}
+                helperText={(passwordError && fieldError) && "Please enter valid password"}
               />
             )}
             {isConfirmPassword && (
@@ -134,21 +137,20 @@ const FormComp = ({
                 value={confirmPassword}
                 name="confirmPassword"
                 onChange={handleChange}
-                error={confirmPasswordError}
-                helperText={confirmPassword && "Please enter valid password"}
+                error={!!confirmPasswordError && fieldError}
+                helperText={(confirmPassword && fieldError) && "Please enter valid password"}
               />
             )}
             <Button
               variant="contained"
               sx={{ marginTop: "16px" }}
               color="error"
-              onClick={() => handleOpenModal(false)}
+              onClick={handleFormSubmit}
             >
               {submitBtnName}
             </Button>
           </Stack>
         </Box>
-      </Modal>
     </div>
   );
 };
