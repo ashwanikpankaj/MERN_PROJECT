@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 import _map from "lodash/map";
 import _get from "lodash/get";
@@ -19,10 +19,13 @@ import {
   ratingFilterConfig,
 } from "./home.config";
 import { makeFilterPayload } from "./home.factory";
+import { getProducts,getFilteredProduct } from "../../reducers/app.reducer";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const dispatch = useDispatch();
+  const {products} = useSelector(state=>state.ecommerceReducer)
+
   const [selectedFilterConfig, setSelectedFilterConfig] = useState({
     price: priceFilterConfig,
     category: categoryFilterConfig,
@@ -32,8 +35,7 @@ const Home = () => {
   const getProduct = useCallback(async () => {
     try {
       setIsFetching(true);
-      const res = await axios.get("http://localhost:8000/all-product");
-      setProducts(res.data);
+      dispatch(getProducts())
     } catch (err) {
       console.log(err);
     } finally {
@@ -50,19 +52,15 @@ const Home = () => {
       setIsFetching(true);
       const payload = makeFilterPayload(selectedFilterConfig);
       if (_size(payload) > 0) {
-        const response = await axios.post(
-          "http://localhost:8000/product/filter",
-          { filters: payload }
-        );
-        setProducts(response?.data);
+       dispatch(getFilteredProduct({ filters: payload }))
       } else {
-        getProduct();
+        dispatch(getProducts())
       }
     } catch (err) {
     } finally {
       setIsFetching(false);
     }
-  }, [selectedFilterConfig, getProduct]);
+  }, [selectedFilterConfig,dispatch]);
 
   const handleSectionFilterSelect = useCallback((data) => {
     setSelectedFilterConfig(data);

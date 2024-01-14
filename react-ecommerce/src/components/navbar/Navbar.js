@@ -69,7 +69,7 @@ export default function Navbar({ isLoggedIn, isSignup }) {
   }, []);
 
   const renderForm = () => {
-    return isSignupModal ? (
+    return true ? (
       <SignUp
         handleOpenSignupModal={handleOpenSignupModal}
         isSignupModal={isSignupModal}

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -30,7 +28,25 @@ const FormComp = ({
   isConfirmPassword,
   modalTitle,
   submitBtnName,
+  formValue,
+  handleFormData,
+  formErrorValue
 }) => {
+  const {
+    name = "",
+    email = "",
+    mobile = "",
+    password = "",
+    confirmPassword = "",
+  } = formValue || {};
+
+  const {nameError,emailError,passwordError,confirmPasswordError,mobileError} = formErrorValue || {}
+
+  const handleChange = (event) => {
+    const { value, name } = event?.target;
+    handleFormData(name, value);
+  };
+
   return (
     <div>
       <Modal
@@ -60,13 +76,27 @@ const FormComp = ({
           </Stack>
           <Stack spacing={2}>
             {isName && (
-              <TextField id="outlined-basic" label="Name" variant="outlined" />
+              <TextField
+                id="outlined-basic"
+                label="Name"
+                variant="outlined"
+                onChange={handleChange}
+                name="name"
+                value={name}
+                error={nameError}
+                helperText={nameError && "Please enter valid name"}
+              />
             )}
             {isEmailId && (
               <TextField
                 id="outlined-basic"
                 label="Email Id"
                 variant="outlined"
+                value={email}
+                name="email"
+                onChange={handleChange}
+                error={emailError}
+                helperText={emailError && "Please enter valid email"}
               />
             )}
             {isMobileNum && (
@@ -74,6 +104,12 @@ const FormComp = ({
                 id="outlined-basic"
                 label="Mobile Number"
                 variant="outlined"
+                type="number"
+                value={mobile}
+                name="mobile"
+                onChange={handleChange}
+                error={mobileError}
+                helperText={mobileError && "Please enter valid mobile number"}
               />
             )}
             {isPassword && (
@@ -81,6 +117,12 @@ const FormComp = ({
                 id="outlined-basic"
                 label="Password"
                 variant="outlined"
+                type="password"
+                value={password}
+                name="password"
+                onChange={handleChange}
+                error={passwordError}
+                helperText={passwordError && "Please enter valid password"}
               />
             )}
             {isConfirmPassword && (
@@ -88,6 +130,12 @@ const FormComp = ({
                 id="outlined-basic"
                 label="Confirm Password"
                 variant="outlined"
+                type="password"
+                value={confirmPassword}
+                name="confirmPassword"
+                onChange={handleChange}
+                error={confirmPasswordError}
+                helperText={confirmPassword && "Please enter valid password"}
               />
             )}
             <Button
