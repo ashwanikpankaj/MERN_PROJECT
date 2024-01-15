@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {  useSelector } from "react-redux";
 import _isEmpty from "lodash/isEmpty";
+import _size from 'lodash/size';
 
 import { styled, alpha } from "@mui/material/styles";
 import { useCallback } from "react";
@@ -63,11 +64,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar({}) {
+export default function Navbar({wishListData,cartData}) {
   const [isOpen, setOpen] = useState(false);
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const { user } = useSelector((state) => state?.ecommerceReducer);
-console.log(user)
+  const noOfItemsInCart = _size(cartData);
+  const noOfItemsInWishlist = _size(wishListData);
+
   const handleOpenModal = useCallback((value) => {
     setOpen(value);
   }, []);
@@ -107,7 +110,7 @@ console.log(user)
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: "flex" }}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={noOfItemsInCart} color="error">
             <AddShoppingCartIcon />
           </Badge>
         </IconButton>
@@ -116,7 +119,7 @@ console.log(user)
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={noOfItemsInWishlist} color="error">
             <FavoriteTwoToneIcon />
           </Badge>
         </IconButton>

@@ -7,8 +7,8 @@ const initialState = {
   user: {},
   isLoading: false,
   products: {},
-  cardData: [],
-  wishListData: [],
+  cartData: {},
+  wishListData: {},
 };
 
 export const login = createAsyncThunk("login", async (payload) => {
@@ -29,6 +29,29 @@ export const getProducts = createAsyncThunk('allProduct', async (payload) => {
 export const getFilteredProduct = createAsyncThunk('filtereProduct',async(payload)=>{
     const res = await axios.post(`${initURL}/product/filter`,payload)
     return res.data
+})
+
+export const addToCart  = createAsyncThunk('cartAdd',async(payload)=>{
+  await axios.post(`${initURL}/add-to-cart`,payload);
+   const cart  = await getCartAndWishList(payload?.userId)
+   return cart
+})
+
+export const addToWishList  = createAsyncThunk('wishListAdd',async(payload)=>{
+  await axios.post(`${initURL}/add-to-wishlist`,payload);
+   const cart  = await getCartAndWishList(payload?.userId)
+   return cart
+})
+
+
+export const getCartAndWishList = async(userId)=>{
+  const res = await axios.get(`${initURL}/cart-and-wishlist/${userId}`);
+  return res.data;
+}
+
+export const getCartAndWishListAction  = createAsyncThunk('cartAndWishList',async(userId)=>{
+  const res = await getCartAndWishList(userId);
+  return res.data
 })
 
 const appReducer = createSlice({
@@ -54,6 +77,24 @@ const appReducer = createSlice({
         [getFilteredProduct.fulfilled]:(state,action)=>{
             const {payload} = action;
             state.products = payload
+        },
+        [addToCart.fulfilled]:(state,action)=>{
+          const {payload} = action;
+          const {wishList = {},cartList = {}} = payload;
+          state.cartData = cartList ;
+           state.wishListData = wishList;
+        },
+        [addToWishList.fulfilled]:(state,action)=>{
+          const {payload} = action;
+          const {wishList = {},cartList = {}} = payload;
+          state.cartData = cartList ;
+           state.wishListData = wishList;
+        },
+        [getCartAndWishListAction.fulfilled]:(state,action)=>{
+          const {payload} = action;
+          const {wishList = {},cartList = {}} = payload;
+          state.cartData = cartList ;
+           state.wishListData = wishList;
         }
       },
 });

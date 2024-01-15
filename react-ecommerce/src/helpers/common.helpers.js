@@ -8,3 +8,7 @@ export const  getInitials = (name='') =>{
 
   return initials;
 }
+
+export const callFnWithDelay = (callBack,delayTime)=>{
+  setTimeout(callBack,delayTime)
+}

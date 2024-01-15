@@ -19,19 +19,19 @@ import {
   ratingFilterConfig,
 } from "./home.config";
 import { makeFilterPayload } from "./home.factory";
-import { getProducts,getFilteredProduct } from "../../reducers/app.reducer";
+import { getProducts,getFilteredProduct, addToCart, addToWishList } from "../../reducers/app.reducer";
 
 const Home = () => {
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
-  const {products} = useSelector(state=>state.ecommerceReducer)
+  const {products,cartData,user,wishListData} = useSelector(state=>state.ecommerceReducer)
 
   const [selectedFilterConfig, setSelectedFilterConfig] = useState({
     price: priceFilterConfig,
     category: categoryFilterConfig,
     rating: ratingFilterConfig,
   });
-
+console.log({cartData,wishListData,hello:'homePage'})
   const getProduct = useCallback(async () => {
     try {
       setIsFetching(true);
@@ -41,7 +41,7 @@ const Home = () => {
     } finally {
       setIsFetching(false);
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     getProduct();
@@ -66,6 +66,16 @@ const Home = () => {
     setSelectedFilterConfig(data);
   }, []);
 
+  const onAddToCart = useCallback(async (selectedProduct)=>{
+  const payload = {userId:user?.userId,products:[selectedProduct]}
+     dispatch(addToCart(payload))
+  },[dispatch,user?.userId])
+
+  const onAddToWishList = useCallback((selectedProduct)=>{
+    const payload = {userId:user?.userId,products:[selectedProduct]};
+    dispatch(addToWishList(payload))
+  },[user?.userId,dispatch])
+
   const renderSubSection = (category) => {
     const selectedCategoryProduct = _get(products,["productMap", category],[]);
 
@@ -83,7 +93,7 @@ const Home = () => {
               style={{ width: "100vw", overflowX: "scroll" }}
             >
               {_map(selectedCategoryProduct, (itemData) => (
-                <MyCard {...itemData} />
+                <MyCard  onAddToCart={onAddToCart} item={itemData} onAddToWishList={onAddToWishList}/>
               ))}
             </Stack>
           </>
@@ -125,7 +135,7 @@ const Home = () => {
   return (
     <>
       <div style={{ height: "100vh", width: "100%" }}>
-        <Navbar />
+        <Navbar cartData={cartData?.products} wishListData={wishListData?.products}/>
         <ReactSlider />
         <Stack spacing={2} direction="row" style={{ height: "100%" }}>
           <Filter

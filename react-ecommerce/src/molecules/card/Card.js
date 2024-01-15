@@ -10,7 +10,15 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
-export default function MyCard({ name, price, rating, size, image }) {
+export default function MyCard({item,onAddToCart,onAddToWishList}) {
+  const { name, price, rating, size, image } = item;
+  const handleAddToCart = (selectedProduct)=>()=>{
+    onAddToCart(selectedProduct)
+  }
+
+  const handleWishList = (selectedProduct)=>()=>{
+    onAddToWishList(selectedProduct)
+  }
   const renderName = () => (
     <>
       <Typography variant="h5" component="div">
@@ -25,10 +33,10 @@ export default function MyCard({ name, price, rating, size, image }) {
         <Typography variant="h6" color="text.secondary">
           {`Rs-${price}`}
         </Typography>
-        <Button variant="outlined" color="error">
+        <Button variant="outlined" color="error" onClick={handleWishList(item)}>
           <FavoriteIcon color="error" />
         </Button>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={handleAddToCart(item)}>
           Add To Cart
         </Button>
       </Stack>

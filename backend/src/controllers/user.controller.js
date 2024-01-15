@@ -16,8 +16,8 @@ router.post('/login',async(req,res)=>{
     // check password
     const isPasswordMatched = await bcrypt.compare(password,user.password);
     if(!isPasswordMatched) return res.status(500).send({message:'Please enter a valid email and password',status:500});
-    const {email:emailid,name,mobile} = user || {}
-    return  res.status(200).send({user:{email:emailid,name,mobile},status:200,token:CommonHelpers.getNewToken(user)});
+    const {email:emailid,name,mobile,_id} = user || {}
+    return  res.status(200).send({user:{email:emailid,name,mobile,userId:_id},status:200,token:CommonHelpers.getNewToken(user)});
 
   }
   catch(err){
