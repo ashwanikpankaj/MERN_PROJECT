@@ -5,20 +5,30 @@ const initURL = "http://localhost:8000";
 
 const initialState = {
   user: {},
-  isLoading: false,
+  isLoginError: false,
   products: {},
   cartData: {},
   wishListData: {},
 };
 
 export const login = createAsyncThunk("login", async (payload) => {
-  const res = await axios.post(`${initURL}/user/login`, payload);
-  return res.data;
+  try{
+    const res = await axios.post(`${initURL}/user/login`, payload);
+    return res.data;
+  }
+  catch(err){
+    return null
+  }
 });
 
 export const signup = createAsyncThunk("signup", async (payload) => {
+  try{
     const res = await axios.post(`${initURL}/user/signup`, payload);
     return res.data;
+  }
+ catch(err){
+  return null
+ }
   });
 
 export const getProducts = createAsyncThunk('allProduct', async (payload) => {
@@ -51,24 +61,45 @@ export const getCartAndWishList = async(userId)=>{
 
 export const getCartAndWishListAction  = createAsyncThunk('cartAndWishList',async(userId)=>{
   const res = await getCartAndWishList(userId);
-  return res.data
+  return res
 })
 
 const appReducer = createSlice({
   name: "ecommerceReducer",
   initialState,
-  reducers: {},
+  reducers: {
+    addUserDataFromLS:(state,action)=>{
+      const {payload} = action;
+      state.user = payload
+    },
+    logoutUser:(state,action)=>{
+      state.user = {}
+      state.cartData = {}
+      state.wishListData ={}
+    }
+  },
   extraReducers:{
         [login.pending]: (state, action) => {
-          state.isLoading = true;
         },
         [login.fulfilled]: (state, action) => {
           const {payload} = action;
-         state.user = payload?.user; 
+         if(payload){
+          state.user = payload?.user;
+          state.isLoginError=false
+         }
+         else{
+          state.isLoginError=true
+         }      
         },
         [signup.fulfilled]:(state,action)=>{
           const {payload} = action
-         state.user = payload?.user; 
+          if(payload){
+            state.isLoginError=true
+            state.user = payload?.user; 
+          }
+          else{
+            state.isLoginError=false
+          }
         },
         [getProducts.fulfilled]: (state, action) => {
             const {payload} = action
@@ -98,7 +129,7 @@ const appReducer = createSlice({
         }
       },
 });
-
+export const {addUserDataFromLS,logoutUser} =  appReducer.actions
 export default appReducer.reducer;
 
 

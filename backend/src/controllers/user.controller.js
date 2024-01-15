@@ -37,10 +37,10 @@ router.post('/signup',async(req,res)=>{
       if(err) return res.status(500).send({message:'Something went wrong',status:500});
 
       const createUser = await User.create({...req.body,password:result});
-      const {email,name,mobile} =createUser || {}  
+      const {email,name,mobile,_id} =createUser || {}  
       const token = CommonHelpers.getNewToken(createUser);
 
-        res.status(200).send({user:{email,name,mobile},status:201,token});
+        res.status(200).send({user:{email,name,mobile, userId:_id},status:201,token});
      })
     }
     catch(err){

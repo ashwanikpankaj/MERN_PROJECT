@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import _map from "lodash/map";
 import _get from "lodash/get";
 import _size from "lodash/size";
+import _isEmpty from "lodash/isEmpty";
 
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import Navbar from "../../components/navbar/Navbar";
 import MyCard from "../../molecules/card/Card";
 import Filter from "../../components/filterSection/Filter";
 import ReactSlider from "../../components/reactSlider/ReactSlider";
@@ -19,23 +19,32 @@ import {
   ratingFilterConfig,
 } from "./home.config";
 import { makeFilterPayload } from "./home.factory";
-import { getProducts,getFilteredProduct, addToCart, addToWishList } from "../../reducers/app.reducer";
+import {
+  getProducts,
+  getFilteredProduct,
+  addToCart,
+  addToWishList,
+  getCartAndWishListAction,
+  addUserDataFromLS,
+} from "../../reducers/app.reducer";
 
 const Home = () => {
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
-  const {products,cartData,user,wishListData} = useSelector(state=>state.ecommerceReducer)
+  const { products, cartData, user, wishListData } = useSelector(
+    (state) => state.ecommerceReducer
+  );
 
   const [selectedFilterConfig, setSelectedFilterConfig] = useState({
     price: priceFilterConfig,
     category: categoryFilterConfig,
     rating: ratingFilterConfig,
   });
-console.log({cartData,wishListData,hello:'homePage'})
+  console.log({ cartData, wishListData, hello: "homePage" });
   const getProduct = useCallback(async () => {
     try {
       setIsFetching(true);
-      dispatch(getProducts())
+      dispatch(getProducts());
     } catch (err) {
       console.log(err);
     } finally {
@@ -44,40 +53,64 @@ console.log({cartData,wishListData,hello:'homePage'})
   }, [dispatch]);
 
   useEffect(() => {
+    // on first time rendering try to get data from local storage and update all the redux state
+    const userData = JSON.parse(localStorage.getItem('loggedInUser'))
+    if(!_isEmpty(userData)){
+      dispatch(getCartAndWishListAction(userData?.userId));
+      dispatch(addUserDataFromLS(userData))
+    }
     getProduct();
-  }, []);
+  }, [dispatch,getProduct]);
+
+  useEffect(() => {
+    if (!_isEmpty(user)) {
+      // whenever user does the login this will get called to fetch new cart and wishlist data
+      dispatch(getCartAndWishListAction(user?.userId));
+      localStorage.setItem('loggedInUser',JSON.stringify(user))
+    }
+  }, [user?.userId]);
 
   const handleFilter = useCallback(async () => {
     try {
       setIsFetching(true);
       const payload = makeFilterPayload(selectedFilterConfig);
       if (_size(payload) > 0) {
-       dispatch(getFilteredProduct({ filters: payload }))
+        dispatch(getFilteredProduct({ filters: payload }));
       } else {
-        dispatch(getProducts())
+        dispatch(getProducts());
       }
     } catch (err) {
     } finally {
       setIsFetching(false);
     }
-  }, [selectedFilterConfig,dispatch]);
+  }, [selectedFilterConfig, dispatch]);
 
   const handleSectionFilterSelect = useCallback((data) => {
     setSelectedFilterConfig(data);
   }, []);
 
-  const onAddToCart = useCallback(async (selectedProduct)=>{
-  const payload = {userId:user?.userId,products:[selectedProduct]}
-     dispatch(addToCart(payload))
-  },[dispatch,user?.userId])
+  const onAddToCart = useCallback(
+    async (selectedProduct) => {
+      const payload = { userId: user?.userId, products: [selectedProduct] };
+      dispatch(addToCart(payload));
+    },
+    [dispatch, user?.userId]
+  );
 
-  const onAddToWishList = useCallback((selectedProduct)=>{
-    const payload = {userId:user?.userId,products:[selectedProduct]};
-    dispatch(addToWishList(payload))
-  },[user?.userId,dispatch])
+  const onAddToWishList = useCallback(
+    (selectedProduct) => {
+      const payload = { userId: user?.userId, products: [selectedProduct] };
+      dispatch(addToWishList(payload));
+    },
+    [user?.userId, dispatch]
+  );
 
   const renderSubSection = (category) => {
-    const selectedCategoryProduct = _get(products,["productMap", category],[]);
+    const selectedCategoryProduct = _get(
+      products,
+      ["productMap", category],
+      []
+    );
 
     return (
       <>
@@ -93,7 +126,12 @@ console.log({cartData,wishListData,hello:'homePage'})
               style={{ width: "100vw", overflowX: "scroll" }}
             >
               {_map(selectedCategoryProduct, (itemData) => (
-                <MyCard  onAddToCart={onAddToCart} item={itemData} onAddToWishList={onAddToWishList}/>
+                <MyCard
+                  onAddToCart={onAddToCart}
+                  item={itemData}
+                  onAddToWishList={onAddToWishList}
+                  user={user}
+                />
               ))}
             </Stack>
           </>
@@ -110,7 +148,7 @@ console.log({cartData,wishListData,hello:'homePage'})
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          width:'100vw'
+          width: "100vw",
         }}
       >
         <CircularProgress />
@@ -135,7 +173,6 @@ console.log({cartData,wishListData,hello:'homePage'})
   return (
     <>
       <div style={{ height: "100vh", width: "100%" }}>
-        <Navbar cartData={cartData?.products} wishListData={wishListData?.products}/>
         <ReactSlider />
         <Stack spacing={2} direction="row" style={{ height: "100%" }}>
           <Filter

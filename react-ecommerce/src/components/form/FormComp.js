@@ -1,6 +1,7 @@
+import _isEmpty from 'lodash/isEmpty';
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -22,7 +23,8 @@ const FormComp = ({
   handleFormDataChange,
   formErrorValue,
   onSubmitForm,
-  resetFormValue
+  resetFormValue,
+  user,
 }) => {
   const {
     name = "",
@@ -43,11 +45,12 @@ const FormComp = ({
 
   const handleFormSubmit  = ()=>{
     const isErrorInForm = getIsFormErrorPresent(formErrorValue)
-    console.log({isErrorInForm,formErrorValue})
     setFieldError(true)
+
     if(isErrorInForm) return;
+
     onSubmitForm()
-    handleOpenModal(false)
+
   }
 
   const handleClose = ()=>{

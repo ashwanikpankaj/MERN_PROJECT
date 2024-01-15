@@ -1,6 +1,7 @@
 import * as React from "react";
 import StarRatings from "react-star-ratings";
 import _map from "lodash/map";
+import _isEmpty from 'lodash/isEmpty';
 
 import Card from "@mui/material/Card";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -10,7 +11,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
-export default function MyCard({item,onAddToCart,onAddToWishList}) {
+export default function MyCard({item,onAddToCart,onAddToWishList,user}) {
+  const isLoggedIn = !_isEmpty(user);
   const { name, price, rating, size, image } = item;
   const handleAddToCart = (selectedProduct)=>()=>{
     onAddToCart(selectedProduct)
@@ -33,12 +35,13 @@ export default function MyCard({item,onAddToCart,onAddToWishList}) {
         <Typography variant="h6" color="text.secondary">
           {`Rs-${price}`}
         </Typography>
-        <Button variant="outlined" color="error" onClick={handleWishList(item)}>
-          <FavoriteIcon color="error" />
+        <Button variant="outlined" color="error" onClick={handleWishList(item)} disabled={!isLoggedIn}>
+          <FavoriteIcon color={isLoggedIn?'error':''} />
         </Button>
-        <Button variant="contained" color="primary" onClick={handleAddToCart(item)}>
+        <Button variant="contained" color="primary" onClick={handleAddToCart(item)} disabled={!isLoggedIn}>
           Add To Cart
         </Button>
+       
       </Stack>
     </>
   );

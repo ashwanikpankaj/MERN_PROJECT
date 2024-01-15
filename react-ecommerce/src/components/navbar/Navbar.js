@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import {  useSelector } from "react-redux";
+import React, { useState, useMemo } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import _isEmpty from "lodash/isEmpty";
-import _size from 'lodash/size';
+import _size from "lodash/size";
 
 import { styled, alpha } from "@mui/material/styles";
 import { useCallback } from "react";
@@ -17,12 +19,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-import Avatar from '@mui/material/Avatar';
-import { deepOrange } from '@mui/material/colors';
+import Avatar from "@mui/material/Avatar";
+import { deepOrange } from "@mui/material/colors";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
 
 import Login from "../login";
 import SignUp from "../signUp";
 import { getInitials } from "../../helpers/common.helpers";
+import { logoutUser } from "../../reducers/app.reducer";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,12 +71,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar({wishListData,cartData}) {
+export default function Navbar({ wishListData, cartData }) {
   const [isOpen, setOpen] = useState(false);
   const [openSignupModal, setOpenSignupModal] = useState(false);
+  const [openLogoutDialog,setOpenLogoutDialog] = useState(false);
+  const navigate  = useNavigate()
+
   const { user } = useSelector((state) => state?.ecommerceReducer);
+  const dispatch  = useDispatch()
+ 
   const noOfItemsInCart = _size(cartData);
   const noOfItemsInWishlist = _size(wishListData);
+  const isLoggedIn = useMemo(() => !_isEmpty(user), [user]);
 
   const handleOpenModal = useCallback((value) => {
     setOpen(value);
@@ -105,12 +118,51 @@ export default function Navbar({wishListData,cartData}) {
 
   const menuId = "primary-search-account-menu";
 
+  const hanldeLogoutDialogClose = ()=>{
+    setOpenLogoutDialog(false)
+  }
+
+  const handleLoginProfileClick = ()=>{
+    setOpenLogoutDialog(true)
+  }
+
+  const handleLogout = ()=>{
+    dispatch(logoutUser())
+    hanldeLogoutDialogClose();
+    localStorage.removeItem('loggedInUser')
+  }
+
+  const renderLogoutDialog = ()=>{
+    return <Dialog open={openLogoutDialog} onClose={hanldeLogoutDialogClose}>
+      <DialogTitle>Do you want to logout?.</DialogTitle>
+      <DialogActions>
+        <Button variant="contained" color="error" onClick={handleLogout}>YES</Button>
+        <Button onClick={hanldeLogoutDialogClose} variant="contained">Cancel</Button>
+      </DialogActions>
+    </Dialog>
+  }
+
+
+  const renderProfile = () => {
+    return isLoggedIn ? (
+      <Avatar sx={{ bgcolor: deepOrange[500], width: 35, height: 35 }} onClick={handleLoginProfileClick}>
+        {getInitials(user?.name)}
+      </Avatar>
+    ) : (
+      <AccountCircle onClick={() => handleOpenModal(true)} />
+    );
+  };
+
   const renderRightSection = () => (
     <>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: "flex" }}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={noOfItemsInCart} color="error">
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={()=>navigate("/cart")}>
+          <Badge
+            badgeContent={noOfItemsInCart}
+            color="error"
+            disabled={!noOfItemsInCart}
+          >
             <AddShoppingCartIcon />
           </Badge>
         </IconButton>
@@ -119,7 +171,11 @@ export default function Navbar({wishListData,cartData}) {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={noOfItemsInWishlist} color="error">
+          <Badge
+            badgeContent={noOfItemsInWishlist}
+            color="error"
+            disabled={!noOfItemsInWishlist}
+          >
             <FavoriteTwoToneIcon />
           </Badge>
         </IconButton>
@@ -131,9 +187,7 @@ export default function Navbar({wishListData,cartData}) {
           aria-haspopup="true"
           color="inherit"
         >
-          {_isEmpty(user) ? 
-            <AccountCircle onClick={() => handleOpenModal(true)} />:<Avatar sx={{ bgcolor: deepOrange[500], width: 35, height: 35  }}>{getInitials(user?.name)}</Avatar>
-          }
+          {renderProfile()}
         </IconButton>
       </Box>
     </>
@@ -171,7 +225,8 @@ export default function Navbar({wishListData,cartData}) {
           </Search>
           {renderRightSection()}
         </Toolbar>
-        {_isEmpty(user) && renderForm()}
+        {!isLoggedIn && renderForm()}
+        {renderLogoutDialog()}
       </AppBar>
     </Box>
   );

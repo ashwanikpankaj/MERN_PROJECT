@@ -1,8 +1,9 @@
-import { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import _isEmpty from 'lodash/isEmpty';
 
 import Modal from "@mui/material/Modal";
-import Box from '@mui/material/Box'
+import Box from "@mui/material/Box";
 
 import { signup } from "../../reducers/app.reducer";
 import FormComp from "../form/FormComp";
@@ -38,6 +39,17 @@ const Signup = ({ isOpen, handleOpenModal }) => {
   });
 
   const dispatch = useDispatch();
+  const { user, isLoginError } = useSelector((state) => state.ecommerceReducer);
+
+  useEffect(() => {
+    if(isLoginError){
+      onFormError()
+    }
+    if(!isLoginError && !_isEmpty(user)){
+      handleOpenModal(false)
+      resetFormValue();
+    }
+  }, [isLoginError]);
 
   const resetFormValue = useCallback(() => {
     setFormData({
@@ -71,16 +83,23 @@ const Signup = ({ isOpen, handleOpenModal }) => {
     resetFormValue();
   }, [dispatch, formData, resetFormValue]);
 
+  const onFormError = useCallback(() => {
+    setFormError({
+      email: "Please enter valid email",
+      password: "Please enter valid password",
+    });
+  }, []);
+
   return (
-      <Modal
-        open={isOpen}
-        onClose={() => handleOpenModal(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-           <Box sx={style}>
+    <Modal
+      open={isOpen}
+      onClose={() => handleOpenModal(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
         <FormComp
-        handleOpenModal={handleOpenModal}
+          handleOpenModal={handleOpenModal}
           isName
           isEmailId
           isMobileNum
@@ -93,9 +112,10 @@ const Signup = ({ isOpen, handleOpenModal }) => {
           onSubmitForm={handleSubmitForm}
           resetFormValue={resetFormValue}
           formErrorValue={formError}
+          user={user}
         />
-        </Box>
-      </Modal>
-    )
+      </Box>
+    </Modal>
+  );
 };
 export default Signup;

@@ -1,13 +1,14 @@
-import { useState ,useCallback} from "react";
-import {useDispatch} from 'react-redux';
+import { useState, useCallback,useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import _isEmpty from 'lodash/isEmpty';
 
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import Box from '@mui/material/Box'
+import Box from "@mui/material/Box";
 
 import FormComp from "../form/FormComp";
 import { getFormError } from "../signUp/signup.helpers";
-import {login} from "../../reducers/app.reducer";
+import { login } from "../../reducers/app.reducer";
 
 const style = {
   position: "absolute",
@@ -21,7 +22,7 @@ const style = {
   p: 4,
 };
 
-const Login = ({ isOpen, handleOpenModal,handleOpenSignupModal}) => {
+const Login = ({ isOpen, handleOpenModal, handleOpenSignupModal }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
@@ -33,29 +34,50 @@ const Login = ({ isOpen, handleOpenModal,handleOpenSignupModal}) => {
     password: undefined,
   });
 
+  const { user,isLoginError } = useSelector((state) => state?.ecommerceReducer);
 
-  const resetFormValue = useCallback(()=>{
+  useEffect(()=>{
+    if(isLoginError){
+      onFormError()
+    }
+    if(!isLoginError && !_isEmpty(user)){
+      handleOpenModal(false)
+      resetFormValue();
+    }
+  },[isLoginError])
+
+  const resetFormValue = useCallback(() => {
     setFormData({
       email: "",
       password: "",
-    })
-  
+    });
+
     setFormError({
       email: undefined,
-      confirmPassword: undefined,
-    })
-  },[])
+      password: undefined,
+    });
+  }, []);
 
-  const handleFormDataChange = useCallback((key, value) => {
-    const formErrors = getFormError({...formData,[key]:value},formError);
-    setFormError(formErrors)
-    setFormData((prevState) => ({ ...prevState, [key]: value }));
-  }, [formData,formError]);
+  const handleFormDataChange = useCallback(
+    (key, value) => {
+      const formErrors = getFormError({ ...formData, [key]: value }, formError);
+      setFormError(formErrors);
+      setFormData((prevState) => ({ ...prevState, [key]: value }));
+    },
+    [formData, formError]
+  );
 
-  const onSubmitForm = useCallback(()=>{
+  const onFormError = () => {
+    setFormError({
+      email: "Please enter valid email",
+      password: "Please enter valid password",
+    });
+  }
+
+
+  const onSubmitForm = useCallback(() => {
     dispatch(login(formData));
-    resetFormValue()
-  },[dispatch,formData,resetFormValue])
+  }, [dispatch, formData]);
 
   return (
     <>
@@ -66,22 +88,25 @@ const Login = ({ isOpen, handleOpenModal,handleOpenSignupModal}) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <FormComp
-        handleOpenModal={handleOpenModal}
-        isEmailId
-        isPassword
-        modalTitle="LOGIN"
-        submitBtnName="LOGIN"
-        handleFormDataChange={handleFormDataChange}
-        onSubmitForm={onSubmitForm}
-        formErrorValue={formError}
-        formValue={formData}
-        resetFormValue={resetFormValue}
-      />
-      <Button sx={{marginTop:"5px"}} onClick={handleOpenSignupModal}>Click To Signup</Button>
-      </Box>
+          <FormComp
+            handleOpenModal={handleOpenModal}
+            isEmailId
+            isPassword
+            modalTitle="LOGIN"
+            submitBtnName="LOGIN"
+            handleFormDataChange={handleFormDataChange}
+            onSubmitForm={onSubmitForm}
+            formErrorValue={formError}
+            formValue={formData}
+            resetFormValue={resetFormValue}
+            user={user}
+          />
+          <Button sx={{ marginTop: "5px" }} onClick={handleOpenSignupModal}>
+            Click To Signup
+          </Button>
+        </Box>
       </Modal>
-      </>
+    </>
   );
 };
 export default Login;
