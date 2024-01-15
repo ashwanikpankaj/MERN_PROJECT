@@ -1,0 +1,211 @@
+[
+    {
+        "_id": "65996d17184a91a4a81548e6",
+        "name": "Levis Jeans",
+        "rating": 1.2,
+        "price": 1409,
+        "category": "Jeans",
+        "image": "https://rukminim2.flixcart.com/image/612/612/kdyus280-0/jean/o/w/u/32-mss20jn082-metronaut-original-imafur6qjgrndewb.jpeg?q=70",
+        "size": [
+            28,
+            30,
+            32
+        ],
+        "createdAt": "2024-01-06T15:09:11.494Z",
+        "updatedAt": "2024-01-06T15:09:11.494Z"
+    },
+    {
+        "_id": "65996d41184a91a4a81548e8",
+        "name": "Puma Jeans",
+        "rating": 4.3,
+        "price": 1800,
+        "category": "Jeans",
+        "image": "https://rukminim2.flixcart.com/image/612/612/kppt47k0/jean/o/o/n/28-ri21031-ragzo-original-imag3w4b42cxpzs5.jpeg?q=70",
+        "size": [
+            28,
+            30,
+            32,
+            34,
+            36
+        ],
+        "createdAt": "2024-01-06T15:09:53.133Z",
+        "updatedAt": "2024-01-06T15:09:53.133Z"
+    },
+    {
+        "_id": "65996d8a184a91a4a81548ea",
+        "name": "Killer Jeans",
+        "rating": 3.7,
+        "price": 1229,
+        "category": "Jeans",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/jean/z/g/w/34-panther-0001-plounge-original-imagrk4pqhdtkhsf.jpeg?q=70",
+        "size": [
+            28,
+            30,
+            32,
+            34,
+            36
+        ],
+        "createdAt": "2024-01-06T15:11:06.326Z",
+        "updatedAt": "2024-01-06T15:11:06.326Z"
+    },
+    {
+        "_id": "65996dca184a91a4a81548ec",
+        "name": "Flying Machine Jeans",
+        "rating": 4.1,
+        "price": 2500,
+        "category": "Jeans",
+        "image": "https://rukminim2.flixcart.com/image/612/612/k70spzk0/jean/y/m/g/30-000878-highlander-original-imafpchp9fqdsqjg.jpeg?q=70",
+        "size": [
+            28,
+            23,
+            36
+        ],
+        "createdAt": "2024-01-06T15:12:10.844Z",
+        "updatedAt": "2024-01-06T15:12:10.844Z"
+    },
+    {
+        "_id": "65a4d03f77cde56875c7fa1a",
+        "name": "U Turn",
+        "rating": 3.5,
+        "price": 99,
+        "category": "Shirt",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shirt/r/9/n/xxl-patta-14-jai-textiles-original-imagn2fzpawqukgq.jpeg?q=70",
+        "size": [
+            "L",
+            "M"
+        ],
+        "createdAt": "2024-01-15T06:27:11.138Z",
+        "updatedAt": "2024-01-15T06:27:11.138Z"
+    },
+    {
+        "_id": "65a4d05c77cde56875c7fa1d",
+        "name": "Relive Shirt",
+        "rating": 4.2,
+        "price": 700,
+        "category": "Shirt",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shirt/z/w/l/l-el69-greysb-feel-high-original-imaggc23kdhsbh7q.jpeg?q=70",
+        "size": [
+            "L"
+        ],
+        "createdAt": "2024-01-15T06:27:40.208Z",
+        "updatedAt": "2024-01-15T06:27:40.208Z"
+    },
+    {
+        "_id": "65a4d07177cde56875c7fa1f",
+        "name": "Alwin Paul",
+        "rating": 4,
+        "price": 489,
+        "category": "Shirt",
+        "image": "https://rukminim2.flixcart.com/image/612/612/l52sivk0/shirt/r/o/4/m-a-wanted-allwin-paul-original-imagfu699zj2hvpg.jpeg?q=70",
+        "size": [
+            "L",
+            "M"
+        ],
+        "createdAt": "2024-01-15T06:28:01.386Z",
+        "updatedAt": "2024-01-15T06:28:01.386Z"
+    },
+    {
+        "_id": "65a4d08977cde56875c7fa21",
+        "name": "Men Regular Fit",
+        "rating": 4.8,
+        "price": 670,
+        "category": "Shirt",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shirt/b/y/t/-original-imaghgdyshwkqjpu.jpeg?q=70",
+        "size": [
+            "L",
+            "M"
+        ],
+        "createdAt": "2024-01-15T06:28:25.385Z",
+        "updatedAt": "2024-01-15T06:28:25.385Z"
+    },
+    {
+        "_id": "65a4d09b77cde56875c7fa23",
+        "name": "Men Slim Fit Checked",
+        "rating": 2.9,
+        "price": 780,
+        "category": "Shirt",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shirt/n/p/i/-original-imaghgdybhsgzezm.jpeg?q=70",
+        "size": [
+            "M"
+        ],
+        "createdAt": "2024-01-15T06:28:43.493Z",
+        "updatedAt": "2024-01-15T06:28:43.493Z"
+    },
+    {
+        "_id": "65a4d0af77cde56875c7fa25",
+        "name": "Men Slim Fit Checked",
+        "rating": 2.9,
+        "price": 780,
+        "category": "Shirt",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shirt/n/p/i/-original-imaghgdybhsgzezm.jpeg?q=70",
+        "size": [
+            "M"
+        ],
+        "createdAt": "2024-01-15T06:29:03.801Z",
+        "updatedAt": "2024-01-15T06:29:03.801Z"
+    },
+    {
+        "_id": "65a4d0bf77cde56875c7fa27",
+        "name": "Athelio running shoes",
+        "rating": 4.7,
+        "price": 879,
+        "category": "Shoes",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/5/l/r/-original-imagpb4zsezbzxft.jpeg?q=70",
+        "size": [
+            "S",
+            "M",
+            "L",
+            "XXL"
+        ],
+        "createdAt": "2024-01-15T06:29:19.093Z",
+        "updatedAt": "2024-01-15T06:29:19.093Z"
+    },
+    {
+        "_id": "65a4d0d677cde56875c7fa29",
+        "name": "Nike Running Shoes",
+        "rating": 3.2,
+        "price": 1500,
+        "category": "Shoes",
+        "image": "https://rukminim2.flixcart.com/image/612/612/kz4gh3k0/shoe/d/b/k/10-atg-424-black-10-action-black-original-imagb7fzftdhebhb.jpeg?q=70",
+        "size": [
+            6,
+            7,
+            8,
+            9,
+            10
+        ],
+        "createdAt": "2024-01-15T06:29:42.799Z",
+        "updatedAt": "2024-01-15T06:29:42.799Z"
+    },
+    {
+        "_id": "65a4d0e677cde56875c7fa2b",
+        "name": "General Sneakers",
+        "rating": 3.4,
+        "price": 1109,
+        "category": "Shoes",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/8/z/t/7-atg-753-7-action-white-r-slate-original-imagmu5zhg4gqzqu.jpeg?q=70",
+        "size": [
+            6,
+            7,
+            8,
+            10,
+            11
+        ],
+        "createdAt": "2024-01-15T06:29:58.392Z",
+        "updatedAt": "2024-01-15T06:29:58.392Z"
+    },
+    {
+        "_id": "65a4d0f577cde56875c7fa2d",
+        "name": "Puma Running Shoe",
+        "rating": 4.8,
+        "price": 1800,
+        "category": "Shoes",
+        "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/7/c/n/-original-imagqxvbcztu9hrj.jpeg?q=70",
+        "size": [
+            10,
+            11
+        ],
+        "createdAt": "2024-01-15T06:30:13.400Z",
+        "updatedAt": "2024-01-15T06:30:13.400Z"
+    }
+]

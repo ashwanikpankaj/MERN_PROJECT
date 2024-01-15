@@ -30,7 +30,6 @@ router.get('/cart-and-wishlist/:id',async(req,res)=>{
     return res.status(200).send({status:200,wishList,cartList})
     }
     catch(err){
-        console.log(err)
      return res.status(500).send({status:500,message:err})
     }
 })

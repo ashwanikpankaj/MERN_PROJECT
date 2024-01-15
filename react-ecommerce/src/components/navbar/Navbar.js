@@ -129,7 +129,8 @@ export default function Navbar({ wishListData, cartData }) {
   const handleLogout = ()=>{
     dispatch(logoutUser())
     hanldeLogoutDialogClose();
-    localStorage.removeItem('loggedInUser')
+    localStorage.removeItem('loggedInUser');
+    navigate("/")
   }
 
   const renderLogoutDialog = ()=>{
@@ -170,6 +171,7 @@ export default function Navbar({ wishListData, cartData }) {
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
+          onClick={()=>navigate("/wishlist")}
         >
           <Badge
             badgeContent={noOfItemsInWishlist}
@@ -210,7 +212,8 @@ export default function Navbar({ wishListData, cartData }) {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{ cursor:'pointer' }}
+            onClick={()=>navigate("/")}
           >
             ECOMMERCE
           </Typography>

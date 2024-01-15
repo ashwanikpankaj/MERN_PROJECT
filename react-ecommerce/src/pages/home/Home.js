@@ -40,35 +40,21 @@ const Home = () => {
     category: categoryFilterConfig,
     rating: ratingFilterConfig,
   });
-  console.log({ cartData, wishListData, hello: "homePage" });
+
   const getProduct = useCallback(async () => {
     try {
       setIsFetching(true);
       dispatch(getProducts());
     } catch (err) {
-      console.log(err);
     } finally {
       setIsFetching(false);
     }
   }, [dispatch]);
 
   useEffect(() => {
-    // on first time rendering try to get data from local storage and update all the redux state
-    const userData = JSON.parse(localStorage.getItem('loggedInUser'))
-    if(!_isEmpty(userData)){
-      dispatch(getCartAndWishListAction(userData?.userId));
-      dispatch(addUserDataFromLS(userData))
-    }
     getProduct();
-  }, [dispatch,getProduct]);
+  }, []);
 
-  useEffect(() => {
-    if (!_isEmpty(user)) {
-      // whenever user does the login this will get called to fetch new cart and wishlist data
-      dispatch(getCartAndWishListAction(user?.userId));
-      localStorage.setItem('loggedInUser',JSON.stringify(user))
-    }
-  }, [user?.userId]);
 
   const handleFilter = useCallback(async () => {
     try {

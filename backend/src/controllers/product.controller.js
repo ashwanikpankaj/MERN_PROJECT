@@ -22,7 +22,6 @@ router.post("/product", async (req, res) => {
     res.status(201).send({ product, status: 201 });
   } catch (err) {
     res.status(500).send({ status: 500, message: err });
-    console.log({ err });
   }
 });
 
@@ -74,7 +73,6 @@ router.post('/filter',async(req,res)=>{
   return   res.status(200).send({status:200,products,categories,productMap})  
   }
   catch(err){
-    console.log(err.message,'err')
    return  res.status(500).send({status:500,message:err?.message})
   }
 })

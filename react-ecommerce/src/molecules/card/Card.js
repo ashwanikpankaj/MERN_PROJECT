@@ -1,7 +1,7 @@
 import * as React from "react";
 import StarRatings from "react-star-ratings";
 import _map from "lodash/map";
-import _isEmpty from 'lodash/isEmpty';
+import _isEmpty from "lodash/isEmpty";
 
 import Card from "@mui/material/Card";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -10,17 +10,26 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+import CloseIcon from "@mui/icons-material/Close";
+import Tooltip from '@mui/material/Tooltip';
 
-export default function MyCard({item,onAddToCart,onAddToWishList,user}) {
+
+export default function MyCard({
+  item,
+  onAddToCart,
+  onAddToWishList,
+  user,
+  isRemoveFromWishList = false,
+}) {
   const isLoggedIn = !_isEmpty(user);
   const { name, price, rating, size, image } = item;
-  const handleAddToCart = (selectedProduct)=>()=>{
-    onAddToCart(selectedProduct)
-  }
+  const handleAddToCart = (selectedProduct) => () => {
+    onAddToCart(selectedProduct);
+  };
 
-  const handleWishList = (selectedProduct)=>()=>{
-    onAddToWishList(selectedProduct)
-  }
+  const handleWishList = (selectedProduct) => () => {
+    onAddToWishList(selectedProduct);
+  };
   const renderName = () => (
     <>
       <Typography variant="h5" component="div">
@@ -35,13 +44,27 @@ export default function MyCard({item,onAddToCart,onAddToWishList,user}) {
         <Typography variant="h6" color="text.secondary">
           {`Rs-${price}`}
         </Typography>
-        <Button variant="outlined" color="error" onClick={handleWishList(item)} disabled={!isLoggedIn}>
-          <FavoriteIcon color={isLoggedIn?'error':''} />
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleAddToCart(item)} disabled={!isLoggedIn}>
+        <Stack direction="row">
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleWishList(item)}
+            disabled={!isLoggedIn || isRemoveFromWishList}
+          >
+            <FavoriteIcon color={isLoggedIn && !isRemoveFromWishList ? "error" : ""}/>
+          </Button>
+          {isRemoveFromWishList && <Tooltip title="Remove from wishlist">
+            <CloseIcon sx={{mt:0.5,cursor:"pointer"}} color="error" />
+            </Tooltip>}
+        </Stack>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAddToCart(item)}
+          disabled={!isLoggedIn}
+        >
           Add To Cart
         </Button>
-       
       </Stack>
     </>
   );
