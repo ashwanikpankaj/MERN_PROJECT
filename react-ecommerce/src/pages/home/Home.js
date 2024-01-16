@@ -24,13 +24,14 @@ import {
   addToCart,
   addToWishList,
 } from "../../reducers/app.reducer";
+import { getIsPresent } from "../../helpers/common.helpers";
 
 const Home = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [selectSize,setSelectSize] = useState(null);
 
   const dispatch = useDispatch();
-  const { products, user } = useSelector(
+  const { products, user,cartData,wishListData } = useSelector(
     (state) => state.ecommerceReducer
   );
 
@@ -118,6 +119,8 @@ const Home = () => {
                   user={user}
                   setSelectSize={setSelectSize}
                   selectSize={selectSize}
+                  isPresentInCart={getIsPresent(itemData,cartData?.products)}
+                  isPresentInWishList={getIsPresent(itemData,wishListData?.products)}
                 />
               ))}
             </Stack>

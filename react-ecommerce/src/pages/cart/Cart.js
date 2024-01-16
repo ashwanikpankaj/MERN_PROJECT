@@ -18,7 +18,7 @@ import SuccessFullDialog from "./components/SuccessFullDialog";
 import { addToCart, cartRemoveAction, decreasItemCartCountAction } from "../../reducers/app.reducer";
 
 const Cart = () => {
-  const { cartData,user } = useSelector((state) => state.ecommerceReducer);
+  const { cartData,user,userAddress } = useSelector((state) => state.ecommerceReducer);
   const [isVisiblePlaceOrder, setVisiblePlaceOrder] = useState(false);
   const [isOpenSuccessDialog,setOpenSuccessfullDialog] = useState(false);
   const navigate = useNavigate()
@@ -116,6 +116,7 @@ const Cart = () => {
           size="large"
           sx={{ minWidth: "400px" }}
           onClick={() => setVisiblePlaceOrder(true)}
+          disabled={!userAddress?.address}
         >
           Checkout
         </Button>

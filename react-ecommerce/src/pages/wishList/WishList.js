@@ -7,9 +7,10 @@ import Stack from "@mui/material/Stack";
 
 import MyCard from "../../molecules/card/Card";
 import { addToCart, wishListRemoveAction } from "../../reducers/app.reducer";
+import { getIsPresent } from "../../helpers/common.helpers";
 
 const WishList = () => {
-  const { wishListData, user } = useSelector(
+  const { wishListData, user,cartData } = useSelector(
     (state) => state?.ecommerceReducer
   );
   const [selectSize, setSelectSize] = useState(null);
@@ -57,6 +58,7 @@ const WishList = () => {
           onWishListRemove={onWishListRemove}
           setSelectSize={setSelectSize}
           selectSize={selectSize}
+          isPresentInCart ={ getIsPresent(item,cartData?.products)}
         />
       ))}
     </Stack>

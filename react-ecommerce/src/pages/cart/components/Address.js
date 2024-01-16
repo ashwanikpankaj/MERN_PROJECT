@@ -75,7 +75,7 @@ const Address = () => {
         disabled={isFieldEmpty}
         onClick={handleAddAdress}
       >
-        {newForm ?"Add Address": "Edit Address"  }
+        {newForm?"Add Address": "Edit Address"  }
       </Button>
     );
   };

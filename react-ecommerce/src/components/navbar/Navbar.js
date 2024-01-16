@@ -158,6 +158,7 @@ export default function Navbar({ wishListData, cartData }) {
     <>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: "flex" }}>
+        <Button sx={{color:"white"}}>My Order</Button>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={()=>navigate("/cart")}  disabled={!noOfItemsInCart}>
           <Badge
             badgeContent={noOfItemsInCart}

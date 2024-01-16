@@ -1,3 +1,6 @@
+import _find from 'lodash/find';
+import _isEmpty from 'lodash/isEmpty'
+
 
 export const  getInitials = (name='') =>{
 
@@ -9,6 +12,8 @@ export const  getInitials = (name='') =>{
   return initials;
 }
 
-export const callFnWithDelay = (callBack,delayTime)=>{
-  setTimeout(callBack,delayTime)
+export const getIsPresent = (selectedProduct,products)=>{
+  const isPresent  = _find(products,(item)=>item?._id === selectedProduct?._id);
+  return !_isEmpty(isPresent)
 }
+

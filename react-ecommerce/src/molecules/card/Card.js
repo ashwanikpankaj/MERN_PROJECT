@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import StarRatings from "react-star-ratings";
 import _map from "lodash/map";
 import _isEmpty from "lodash/isEmpty";
@@ -27,14 +28,21 @@ export default function MyCard({
   isRemoveFromWishList = false,
   onWishListRemove,
   setSelectSize,
-  selectSize
+  selectSize,
+  isPresentInCart,
+  isPresentInWishList
 }) {
   const [showSizeDialog,setSizeDialog] = useState(false)
   const isLoggedIn = !_isEmpty(user);
   const { name, price, rating, size, image,_id } = item;
   const isSizeSelected = selectSize?.productId === _id;
+  const navigate = useNavigate()
 
   const handleAddToCart = (selectedProduct) => () => {
+    if(isPresentInCart){
+   return navigate("/cart")
+    }
+
      if(!isSizeSelected) {
       setSizeDialog(true);
       setTimeout(()=>{
@@ -49,6 +57,9 @@ export default function MyCard({
 
 
   const handleWishList = (selectedProduct) => () => {
+    if(isPresentInWishList){
+      return navigate("/wishlist")
+       }
     onAddToWishList(selectedProduct);
   };
   const renderName = () => (
@@ -72,6 +83,7 @@ export default function MyCard({
             onClick={handleWishList(item)}
             disabled={!isLoggedIn || isRemoveFromWishList}
           >
+              {isPresentInWishList?"Visit":"Add"}
             <FavoriteIcon color={isLoggedIn && !isRemoveFromWishList ? "error" : ""}/>
           </Button>
           {isRemoveFromWishList && <Tooltip title="Remove from wishlist">
@@ -84,7 +96,7 @@ export default function MyCard({
           onClick={handleAddToCart(item)}
           disabled={!isLoggedIn}
         >
-          Add To Cart
+         {isPresentInCart?"Visit Cart":"Add To Cart"}
         </Button>
       </Stack>
     </>
@@ -119,7 +131,7 @@ export default function MyCard({
   const renderSizeDialog = ()=><Dialog open={showSizeDialog}><DialogTitle>Plese select size.!!</DialogTitle></Dialog>
 
   return (
-    <Card sx={{ minWidth: 380 }}>
+    <Card sx={{ minWidth: 400 }}>
       <CardMedia sx={{ height: 380 }} image={image} />
       <CardContent>
         {renderName()}
