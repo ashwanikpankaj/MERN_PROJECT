@@ -23,7 +23,6 @@ const Address = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAddressAction(user?.userId));
     if(userAddress?.address){
       setNewForm(false)
     }

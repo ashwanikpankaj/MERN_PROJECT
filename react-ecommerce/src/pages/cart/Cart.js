@@ -21,14 +21,14 @@ const Cart = () => {
   const { cartData,user,userAddress } = useSelector((state) => state.ecommerceReducer);
   const [isVisiblePlaceOrder, setVisiblePlaceOrder] = useState(false);
   const [isOpenSuccessDialog,setOpenSuccessfullDialog] = useState(false);
+  const [goToMyOrder,setGoToMyOrder] = useState(false)
   const navigate = useNavigate()
   const dispatch  = useDispatch()
-
   useEffect(()=>{
-   if(_isEmpty(cartData?.products)){
-    navigate("/")
-   }
-  },[cartData])
+    if(_isEmpty(cartData?.products) && !goToMyOrder){
+     navigate("/")
+    }
+   },[cartData,goToMyOrder])
 
   const totalPrice = useMemo(() => {
     let sum = 0;
@@ -45,10 +45,11 @@ const Cart = () => {
   const onPlaceOrder = useCallback(() => {
     dispatch(placeOrdeAction({userId:user?.userId,products:cartData?.products}))
     setVisiblePlaceOrder(false);
-    setOpenSuccessfullDialog(true)
+    setOpenSuccessfullDialog(true);
+    setGoToMyOrder(true)
     setTimeout(()=>{
       setOpenSuccessfullDialog(false);
-      navigate("/")
+      navigate("/my-order");
     },1000)
   }, [navigate,dispatch,user,cartData]);
   
