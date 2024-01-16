@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Cart = require('../models/cart.model');
 const WishList = require("../models/wishList.model");
+const CommonHelpers = require("../helpers/common.helpers");
 
 router.post('/add-to-cart',async(req,res)=>{
   try{
@@ -9,13 +10,14 @@ router.post('/add-to-cart',async(req,res)=>{
     const cartItem  = await Cart.findOne({userId});
 
     if(!cartItem){
-    const productToCart = await Cart.create(req.body);
+    const productToCart = await Cart.create({userId,products:[{...productsInBody?.[0],count:1}]});
     return res.status(200).send({cartList:productToCart,status:200})
     }
 
      const {products} = cartItem;
-    const cartProducts = await Cart.findOneAndUpdate({userId},{$set:{products:[...products,...productsInBody]}}, { new: true, useFindAndModify: false })
-    return res.status(200).send({status:200,cartProducts})
+     const allProducts = CommonHelpers.updateItemCountIfPresent(products,productsInBody)
+    const cartProducts = await Cart.findOneAndUpdate({userId},{$set:{products:allProducts}}, { new: true, useFindAndModify: false })
+    return res.status(200).send({status:200,cartProducts,allProducts})
   }
   catch(err){
     return res.status(500).send({message:err,status:500})

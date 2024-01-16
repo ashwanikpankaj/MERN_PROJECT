@@ -158,7 +158,7 @@ export default function Navbar({ wishListData, cartData }) {
     <>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: "flex" }}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={()=>navigate("/cart")}>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={()=>navigate("/cart")}  disabled={!noOfItemsInCart}>
           <Badge
             badgeContent={noOfItemsInCart}
             color="error"
@@ -172,6 +172,7 @@ export default function Navbar({ wishListData, cartData }) {
           aria-label="show 17 new notifications"
           color="inherit"
           onClick={()=>navigate("/wishlist")}
+          disabled={!noOfItemsInWishlist}
         >
           <Badge
             badgeContent={noOfItemsInWishlist}

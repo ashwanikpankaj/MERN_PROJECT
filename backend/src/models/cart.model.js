@@ -6,7 +6,7 @@ const cartSchema = new mongoose.Schema({
         required: true,
         ref: "user"
     },
-    products:{type:Array,required:true}
+    products:{type:Array,required:true},
 })
 
 const cart = mongoose.model('cart',cartSchema);
