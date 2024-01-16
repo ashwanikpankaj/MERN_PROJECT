@@ -1,7 +1,7 @@
-import { useCallback,useEffect } from "react";
-import { useSelector ,useDispatch} from "react-redux";
-import {useNavigate} from 'react-router-dom';
-import _isEmpty from 'lodash/isEmpty';
+import { useCallback, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import _isEmpty from "lodash/isEmpty";
 
 import Stack from "@mui/material/Stack";
 
@@ -9,28 +9,34 @@ import MyCard from "../../molecules/card/Card";
 import { addToCart, wishListRemoveAction } from "../../reducers/app.reducer";
 
 const WishList = () => {
-  const { wishListData,user } = useSelector((state) => state?.ecommerceReducer);
+  const { wishListData, user } = useSelector(
+    (state) => state?.ecommerceReducer
+  );
+  const [selectSize, setSelectSize] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    console.log('called',wishListData)
-    if(_isEmpty(wishListData?.products)){
-      navigate("/")
+  useEffect(() => {
+    console.log("called", wishListData);
+    if (_isEmpty(wishListData?.products)) {
+      navigate("/");
     }
-  },[wishListData])
+  }, [wishListData]);
 
   const onAddToCart = useCallback(
     async (selectedProduct) => {
-      const payload = { userId: user?.userId, products: [selectedProduct] };
+      const payload = { userId: user?.userId, products: [{...selectedProduct,size:[selectSize?.size]}] };
       dispatch(addToCart(payload));
     },
-    [dispatch, user?.userId]
+    [dispatch, user?.userId,selectSize]
   );
 
-  const onWishListRemove = useCallback((productId)=>{
-    dispatch(wishListRemoveAction({userId:user?.userId,productId}))
-  },[dispatch,user]);
+  const onWishListRemove = useCallback(
+    (productId) => {
+      dispatch(wishListRemoveAction({ userId: user?.userId, productId }));
+    },
+    [dispatch, user]
+  );
 
   return (
     <Stack
@@ -43,7 +49,15 @@ const WishList = () => {
       mt={3}
     >
       {wishListData?.products?.map((item) => (
-        <MyCard item={item} isRemoveFromWishList user={user} onAddToCart={onAddToCart} onWishListRemove={onWishListRemove}/>
+        <MyCard
+          item={item}
+          isRemoveFromWishList
+          user={user}
+          onAddToCart={onAddToCart}
+          onWishListRemove={onWishListRemove}
+          setSelectSize={setSelectSize}
+          selectSize={selectSize}
+        />
       ))}
     </Stack>
   );

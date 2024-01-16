@@ -82,6 +82,13 @@ export const getCartAndWishListAction  = createAsyncThunk('cartAndWishList',asyn
   return res
 })
 
+const updateCartAndWishlist = (state,action)=>{
+  const {payload} = action;
+  const {wishList = {},cartList = {}} = payload;
+  state.cartData = cartList ;
+   state.wishListData = wishList;
+}
+
 const appReducer = createSlice({
   name: "ecommerceReducer",
   initialState,
@@ -128,40 +135,22 @@ const appReducer = createSlice({
             state.products = payload
         },
         [addToCart.fulfilled]:(state,action)=>{
-          const {payload} = action;
-          const {wishList = {},cartList = {}} = payload;
-          state.cartData = cartList ;
-           state.wishListData = wishList;
+          updateCartAndWishlist(state,action)
         },
         [addToWishList.fulfilled]:(state,action)=>{
-          const {payload} = action;
-          const {wishList = {},cartList = {}} = payload;
-          state.cartData = cartList ;
-           state.wishListData = wishList;
+          updateCartAndWishlist(state,action)
         },
         [getCartAndWishListAction.fulfilled]:(state,action)=>{
-          const {payload} = action;
-          const {wishList = {},cartList = {}} = payload;
-          state.cartData = cartList ;
-           state.wishListData = wishList;
+          updateCartAndWishlist(state,action)
         },
         [decreasItemCartCountAction.fulfilled]:(state,action)=>{
-          const {payload} = action;
-          const {wishList = {},cartList = {}} = payload;
-          state.cartData = cartList ;
-           state.wishListData = wishList;
+          updateCartAndWishlist(state,action)
         },
         [cartRemoveAction.fulfilled]:(state,action)=>{
-          const {payload} = action;
-          const {wishList = {},cartList = {}} = payload;
-          state.cartData = cartList ;
-           state.wishListData = wishList;
+          updateCartAndWishlist(state,action)
         },
         [wishListRemoveAction.fulfilled]:(state,action)=>{
-          const {payload} = action;
-          const {wishList = {},cartList = {}} = payload;
-          state.cartData = cartList ;
-           state.wishListData = wishList;
+          updateCartAndWishlist(state,action)
         }
       },
 });

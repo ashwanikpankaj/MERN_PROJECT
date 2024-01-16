@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import _map from "lodash/map";
 import _get from "lodash/get";
 import _size from "lodash/size";
-import _isEmpty from "lodash/isEmpty";
 
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -24,14 +23,14 @@ import {
   getFilteredProduct,
   addToCart,
   addToWishList,
-  getCartAndWishListAction,
-  addUserDataFromLS,
 } from "../../reducers/app.reducer";
 
 const Home = () => {
   const [isFetching, setIsFetching] = useState(false);
+  const [selectSize,setSelectSize] = useState(null);
+
   const dispatch = useDispatch();
-  const { products, cartData, user, wishListData } = useSelector(
+  const { products, user } = useSelector(
     (state) => state.ecommerceReducer
   );
 
@@ -77,10 +76,10 @@ const Home = () => {
 
   const onAddToCart = useCallback(
     async (selectedProduct) => {
-      const payload = { userId: user?.userId, products: [selectedProduct] };
+      const payload = { userId: user?.userId, products: [{...selectedProduct,size:[selectSize?.size]}] };
       dispatch(addToCart(payload));
     },
-    [dispatch, user?.userId]
+    [dispatch, user?.userId,selectSize]
   );
 
   const onAddToWishList = useCallback(
@@ -117,6 +116,8 @@ const Home = () => {
                   item={itemData}
                   onAddToWishList={onAddToWishList}
                   user={user}
+                  setSelectSize={setSelectSize}
+                  selectSize={selectSize}
                 />
               ))}
             </Stack>

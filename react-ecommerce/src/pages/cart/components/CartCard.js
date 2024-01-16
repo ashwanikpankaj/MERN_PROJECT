@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton'
 
 const CartCard = ({item,onRemoveFromCart,onAddToCart,onDecreaseCartCount}) => {
-  const {image,name,price,count,_id}  = item
+  const {image,name,price,count,_id,size}  = item
   const renderItemSection = () => {
     return (
      <Stack direction="row" justifyContent="center" alignItems="center">
@@ -17,7 +17,7 @@ const CartCard = ({item,onRemoveFromCart,onAddToCart,onDecreaseCartCount}) => {
         />
         <Stack>
           <Typography>{name}</Typography>
-          <Typography>Size:M</Typography>
+          <Typography>Size:{size?.[0]}</Typography>
         </Stack>
         </div>
         </Stack>
