@@ -101,7 +101,8 @@ export const updateAddressAction = createAsyncThunk('userAddress',async(payload)
 
 export const placeOrdeAction = createAsyncThunk("placeOrder",async(payload)=>{
   const res = await axios.post(`${initURL}/place-order`,payload);
-  return res?.data
+  const response  = await getCartAndWishList(payload?.userId)
+  return {order:res.data,cartAndWishList:response}
 })
 
 export const getUserOrderAction = createAsyncThunk("getMyOder",async(userId)=>{
@@ -189,7 +190,11 @@ const appReducer = createSlice({
         },
         [placeOrdeAction.fulfilled]:(state,action)=>{
           const {payload} =action;
-          state.userOrder = payload; 
+          const {order,cartAndWishList} = payload
+          console.log(payload)
+          state.userOrder = order;
+          state.cartData = cartAndWishList?.cartList;
+          state.wishListData = cartAndWishList?.wishList;
         },
         [getUserOrderAction.fulfilled]:(state,action)=>{
           const {payload} =action;

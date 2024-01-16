@@ -77,7 +77,7 @@ export default function Navbar({ wishListData, cartData }) {
   const [openLogoutDialog,setOpenLogoutDialog] = useState(false);
   const navigate  = useNavigate()
 
-  const { user } = useSelector((state) => state?.ecommerceReducer);
+  const { user,userOrder } = useSelector((state) => state?.ecommerceReducer);
   const dispatch  = useDispatch()
  
   const noOfItemsInCart = _size(cartData);
@@ -158,7 +158,7 @@ export default function Navbar({ wishListData, cartData }) {
     <>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: "flex" }}>
-        <Button sx={{color:"white"}}>My Order</Button>
+        <Button sx={{color:"white"}} disabled={_isEmpty(userOrder?.myOrder)} onClick={()=>navigate("/my-order")}>My Order</Button>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={()=>navigate("/cart")}  disabled={!noOfItemsInCart}>
           <Badge
             badgeContent={noOfItemsInCart}
@@ -201,15 +201,6 @@ export default function Navbar({ wishListData, cartData }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h6"
             noWrap

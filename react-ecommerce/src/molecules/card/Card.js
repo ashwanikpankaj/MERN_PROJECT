@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import _map from "lodash/map";
 import _isEmpty from "lodash/isEmpty";
@@ -12,13 +12,10 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import CloseIcon from "@mui/icons-material/Close";
-import Tooltip from '@mui/material/Tooltip';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import { blueGrey } from '@mui/material/colors';
-
-
-
+import Tooltip from "@mui/material/Tooltip";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import { blueGrey } from "@mui/material/colors";
 
 export default function MyCard({
   item,
@@ -30,36 +27,36 @@ export default function MyCard({
   setSelectSize,
   selectSize,
   isPresentInCart,
-  isPresentInWishList
+  isPresentInWishList,
+  isVisibleCartButton = true,
+  isVisibleWishlistButton = true,
 }) {
-  const [showSizeDialog,setSizeDialog] = useState(false)
+  const [showSizeDialog, setSizeDialog] = useState(false);
   const isLoggedIn = !_isEmpty(user);
-  const { name, price, rating, size, image,_id } = item;
+  const { name, price, rating, size, image, _id } = item;
   const isSizeSelected = selectSize?.productId === _id;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleAddToCart = (selectedProduct) => () => {
-    if(isPresentInCart){
-   return navigate("/cart")
+    if (isPresentInCart) {
+      return navigate("/cart");
     }
 
-     if(!isSizeSelected) {
+    if (!isSizeSelected) {
       setSizeDialog(true);
-      setTimeout(()=>{
-        setSizeDialog(false)
-      },500)
-     return 
-     }
-     
+      setTimeout(() => {
+        setSizeDialog(false);
+      }, 500);
+      return;
+    }
+
     onAddToCart(selectedProduct);
   };
 
-
-
   const handleWishList = (selectedProduct) => () => {
-    if(isPresentInWishList){
-      return navigate("/wishlist")
-       }
+    if (isPresentInWishList) {
+      return navigate("/wishlist");
+    }
     onAddToWishList(selectedProduct);
   };
   const renderName = () => (
@@ -76,28 +73,40 @@ export default function MyCard({
         <Typography variant="h6" color="text.secondary">
           {`Rs-${price}`}
         </Typography>
-        <Stack direction="row">
+        {isVisibleWishlistButton && (
+          <Stack direction="row">
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleWishList(item)}
+              disabled={!isLoggedIn || isRemoveFromWishList}
+            >
+              {isPresentInWishList ? "Visit" : "Add"}
+              <FavoriteIcon
+                color={isLoggedIn && !isRemoveFromWishList ? "error" : ""}
+              />
+            </Button>
+            {isRemoveFromWishList && (
+              <Tooltip title="Remove from wishlist">
+                <CloseIcon
+                  sx={{ mt: 0.5, cursor: "pointer" }}
+                  color="error"
+                  onClick={() => onWishListRemove(_id)}
+                />
+              </Tooltip>
+            )}
+          </Stack>
+        )}
+        {isVisibleCartButton && (
           <Button
-            variant="outlined"
-            color="error"
-            onClick={handleWishList(item)}
-            disabled={!isLoggedIn || isRemoveFromWishList}
+            variant="contained"
+            color="primary"
+            onClick={handleAddToCart(item)}
+            disabled={!isLoggedIn}
           >
-              {isPresentInWishList?"Visit":"Add"}
-            <FavoriteIcon color={isLoggedIn && !isRemoveFromWishList ? "error" : ""}/>
+            {isPresentInCart ? "Visit Cart" : "Add To Cart"}
           </Button>
-          {isRemoveFromWishList && <Tooltip title="Remove from wishlist">
-            <CloseIcon sx={{mt:0.5,cursor:"pointer"}} color="error" onClick={()=>onWishListRemove(_id)}/>
-            </Tooltip>}
-        </Stack>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAddToCart(item)}
-          disabled={!isLoggedIn}
-        >
-         {isPresentInCart?"Visit Cart":"Add To Cart"}
-        </Button>
+        )}
       </Stack>
     </>
   );
@@ -122,13 +131,28 @@ export default function MyCard({
       <Typography>Size-</Typography>
       {_map(size, (item) => (
         <>
-          <Typography size="small" color={isSizeSelected && selectSize?.size===item?"error":blueGrey[500]} sx={{cursor:"pointer"}} onClick={()=>setSelectSize({productId:_id,size:item})}>{item}</Typography>
+          <Typography
+            size="small"
+            color={
+              isSizeSelected && selectSize?.size === item
+                ? "error"
+                : blueGrey[500]
+            }
+            sx={{ cursor: "pointer" }}
+            onClick={() => setSelectSize({ productId: _id, size: item })}
+          >
+            {item}
+          </Typography>
         </>
       ))}
     </Stack>
   );
 
-  const renderSizeDialog = ()=><Dialog open={showSizeDialog}><DialogTitle>Plese select size.!!</DialogTitle></Dialog>
+  const renderSizeDialog = () => (
+    <Dialog open={showSizeDialog}>
+      <DialogTitle>Plese select size.!!</DialogTitle>
+    </Dialog>
+  );
 
   return (
     <Card sx={{ minWidth: 400 }}>

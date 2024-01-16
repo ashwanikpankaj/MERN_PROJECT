@@ -15,7 +15,7 @@ import Total from "./components/Total";
 import Address from "./components/Address";
 import PlaceOrder from "./components/PlaceOrder";
 import SuccessFullDialog from "./components/SuccessFullDialog";
-import { addToCart, cartRemoveAction, decreasItemCartCountAction } from "../../reducers/app.reducer";
+import { addToCart, cartRemoveAction, decreasItemCartCountAction, placeOrdeAction } from "../../reducers/app.reducer";
 
 const Cart = () => {
   const { cartData,user,userAddress } = useSelector((state) => state.ecommerceReducer);
@@ -43,14 +43,14 @@ const Cart = () => {
   }, []);
 
   const onPlaceOrder = useCallback(() => {
-    // dispatch(pl)
+    dispatch(placeOrdeAction({userId:user?.userId,products:cartData?.products}))
     setVisiblePlaceOrder(false);
     setOpenSuccessfullDialog(true)
     setTimeout(()=>{
       setOpenSuccessfullDialog(false);
       navigate("/")
     },1000)
-  }, [navigate,dispatch]);
+  }, [navigate,dispatch,user,cartData]);
   
   const onRemoveFromCart = useCallback((productId)=>{
    dispatch(cartRemoveAction({userId:user?.userId,productId}))

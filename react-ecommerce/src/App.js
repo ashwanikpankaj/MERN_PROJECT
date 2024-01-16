@@ -7,7 +7,8 @@ import Home from './pages/home';
 import Cart from './pages/cart/Cart';
 import Navbar from './components/navbar/Navbar';
 import WishList from './pages/wishList/WishList';
-import { addUserDataFromLS, getCartAndWishListAction } from './reducers/app.reducer';
+import { addUserDataFromLS, getCartAndWishListAction, getUserOrderAction } from './reducers/app.reducer';
+import MyOrder from './pages/myOrder/MyOrder';
 
 function App() {
   const {cartData,wishListData,user} = useSelector(state=>state.ecommerceReducer);
@@ -29,6 +30,14 @@ function App() {
     }
   }, [user?.userId]);
 
+  useEffect(() => {
+    if (!_isEmpty(user?.userId)) {
+      // whenever user does the login this will get called to fetch new cart and wishlist data of new user
+      dispatch(getUserOrderAction(user?.userId));
+      localStorage.setItem('loggedInUser',JSON.stringify(user))
+    }
+  }, [user?.userId]);
+
   return (
     <BrowserRouter>
       <Navbar
@@ -39,6 +48,7 @@ function App() {
     <Route path="/" element={<Home/>}/>
     <Route path="/cart" element={<Cart/>}/>
     <Route path="/wishlist" element={<WishList/>}/>
+    <Route path="/my-order" element={<MyOrder/>}/>
    </Routes>
    </BrowserRouter>
   );
