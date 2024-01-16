@@ -4,7 +4,10 @@ const cors = require('cors');
  const productController = require("./controllers/product.controller");
  const userController = require("./controllers/user.controller");
  const cartController = require("./controllers/cart.controller");
- const wishListController = require("./controllers/wishList.contoller")
+ const wishListController = require("./controllers/wishList.contoller");
+ const addressController = require("./controllers/address.controller");
+ const myOrderController = require("./controllers/myOrder.controllers");
+
 
 const app = express();
 
@@ -18,6 +21,8 @@ app.use(cors({origin: 'http://localhost:3003', credentials: true}));
  app.use("/user",userController);
 app.use("/",cartController)
 app.use("/",wishListController);
+app.use("/",addressController);
+app.use("/",myOrderController)
 
 
 module.exports  = app;
