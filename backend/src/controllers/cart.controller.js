@@ -65,4 +65,21 @@ router.post("/cart-decrease-count", async (req, res) => {
   }
 });
 
+router.post('/cart-remove',async(req,res)=>{
+  try{
+    const { productId, userId } = req.body;
+    const { products } = await Cart.findOne({ userId }).lean();
+    const filteredProduct  = products.filter(item=>item?._id !== productId);
+    const updateProduct = await Cart.findOneAndUpdate(
+      { userId },
+      { $set: { products: filteredProduct } },
+      { new: true, useFindAndModify: false }
+    );
+    return res.status(200).send({ products: updateProduct });
+  }
+  catch(err){
+    return res.status(200).send({ message: "Something went wrong", status: 500 })
+  }
+})
+
 module.exports = router;

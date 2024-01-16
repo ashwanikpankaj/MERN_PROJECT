@@ -53,6 +53,12 @@ export const decreasItemCartCountAction = createAsyncThunk('decreasItemCartCount
    return cart
 })
 
+export const cartRemoveAction = createAsyncThunk('cateRemove',async(payload)=>{
+  await axios.post(`${initURL}/cart-remove`,payload);
+  const cart  = await getCartAndWishList(payload?.userId)
+   return cart
+})
+
 export const addToWishList  = createAsyncThunk('wishListAdd',async(payload)=>{
   await axios.post(`${initURL}/add-to-wishlist`,payload);
    const cart  = await getCartAndWishList(payload?.userId)
@@ -140,6 +146,12 @@ const appReducer = createSlice({
            state.wishListData = wishList;
         },
         [decreasItemCartCountAction.fulfilled]:(state,action)=>{
+          const {payload} = action;
+          const {wishList = {},cartList = {}} = payload;
+          state.cartData = cartList ;
+           state.wishListData = wishList;
+        },
+        [cartRemoveAction.fulfilled]:(state,action)=>{
           const {payload} = action;
           const {wishList = {},cartList = {}} = payload;
           state.cartData = cartList ;

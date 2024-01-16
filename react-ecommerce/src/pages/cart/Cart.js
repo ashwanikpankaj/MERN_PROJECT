@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState,useEffect } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import {useNavigate} from 'react-router-dom'
 import _forEach from "lodash/forEach";
+import _isEmpty from 'lodash/isEmpty';
 
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -14,7 +15,7 @@ import Total from "./components/Total";
 import Address from "./components/Address";
 import PlaceOrder from "./components/PlaceOrder";
 import SuccessFullDialog from "./components/SuccessFullDialog";
-import { addToCart, decreasItemCartCountAction } from "../../reducers/app.reducer";
+import { addToCart, cartRemoveAction, decreasItemCartCountAction } from "../../reducers/app.reducer";
 
 const Cart = () => {
   const { cartData,user } = useSelector((state) => state.ecommerceReducer);
@@ -22,6 +23,12 @@ const Cart = () => {
   const [isOpenSuccessDialog,setOpenSuccessfullDialog] = useState(false);
   const navigate = useNavigate()
   const dispatch  = useDispatch()
+
+  useEffect(()=>{
+   if(_isEmpty(cartData?.products)){
+    navigate("/")
+   }
+  },[cartData])
 
   const totalPrice = useMemo(() => {
     let sum = 0;
@@ -45,8 +52,12 @@ const Cart = () => {
   }, [navigate]);
   
   const onRemoveFromCart = useCallback((productId)=>{
-   dispatch(decreasItemCartCountAction({userId:user?.userId,productId}))
+   dispatch(cartRemoveAction({userId:user?.userId,productId}))
   },[dispatch,user])
+
+  const onDecreaseCartCount = useCallback((productId)=>{
+    dispatch(decreasItemCartCountAction({userId:user?.userId,productId}))
+   },[dispatch,user])
 
   const onAddToCart = useCallback((selectedProduct)=>{
     const payload = { userId: user?.userId, products: [selectedProduct] };
@@ -76,7 +87,7 @@ const Cart = () => {
   };
 
   const renderCard = () => {
-    return cartData?.products?.map((item) => <CartCard item={item} onAddToCart={onAddToCart} onRemoveFromCart={onRemoveFromCart}/>);
+    return cartData?.products?.map((item) => <CartCard item={item} onAddToCart={onAddToCart} onRemoveFromCart={onRemoveFromCart} onDecreaseCartCount={onDecreaseCartCount}/>);
   };
 
   const renderTotalAndAddress = () => {
