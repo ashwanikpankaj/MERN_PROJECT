@@ -139,7 +139,11 @@ export default function MyCard({
                 : blueGrey[500]
             }
             sx={{ cursor: "pointer" }}
-            onClick={() => setSelectSize({ productId: _id, size: item })}
+            onClick={() => {
+              if (isVisibleCartButton) {
+                setSelectSize({ productId: _id, size: item });
+              }
+            }}
           >
             {item}
           </Typography>
