@@ -1,5 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const dotenev = require("dotenv");
+const connect = require('./configs/db');
+dotenev.config();
 
 const productController = require("./controllers/product.controller");
 const userController = require("./controllers/user.controller");
@@ -29,5 +32,13 @@ app.use("/", cartController);
 app.use("/", wishListController);
 app.use("/", addressController);
 app.use("/", myOrderController);
+
+const port = process.env.PORT_NUMBER || 8000;
+
+app.listen(port,async ()=>{
+    console.log('Hello I am server and I am running well and good',port);
+     await connect();
+})
+
 
 module.exports = app;
