@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import {useNavigate} from 'react-router-dom'
 import _forEach from "lodash/forEach";
 
@@ -14,17 +14,19 @@ import Total from "./components/Total";
 import Address from "./components/Address";
 import PlaceOrder from "./components/PlaceOrder";
 import SuccessFullDialog from "./components/SuccessFullDialog";
+import { addToCart, decreasItemCartCountAction } from "../../reducers/app.reducer";
 
 const Cart = () => {
-  const { cartData } = useSelector((state) => state.ecommerceReducer);
+  const { cartData,user } = useSelector((state) => state.ecommerceReducer);
   const [isVisiblePlaceOrder, setVisiblePlaceOrder] = useState(false);
   const [isOpenSuccessDialog,setOpenSuccessfullDialog] = useState(false);
   const navigate = useNavigate()
+  const dispatch  = useDispatch()
 
   const totalPrice = useMemo(() => {
     let sum = 0;
     _forEach(cartData?.products, (item) => {
-      sum = sum + item?.price;
+      sum = sum + item?.price * item?.count;
     });
     return sum;
   }, [cartData]);
@@ -41,6 +43,15 @@ const Cart = () => {
       navigate("/")
     },1000)
   }, [navigate]);
+  
+  const onRemoveFromCart = useCallback((productId)=>{
+   dispatch(decreasItemCartCountAction({userId:user?.userId,productId}))
+  },[dispatch,user])
+
+  const onAddToCart = useCallback((selectedProduct)=>{
+    const payload = { userId: user?.userId, products: [selectedProduct] };
+    dispatch(addToCart(payload))
+  },[dispatch,user])
 
   const renderHeading = () => {
     return (
@@ -65,7 +76,7 @@ const Cart = () => {
   };
 
   const renderCard = () => {
-    return cartData?.products?.map((item) => <CartCard item={item} />);
+    return cartData?.products?.map((item) => <CartCard item={item} onAddToCart={onAddToCart} onRemoveFromCart={onRemoveFromCart}/>);
   };
 
   const renderTotalAndAddress = () => {

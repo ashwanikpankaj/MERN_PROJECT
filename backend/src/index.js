@@ -17,7 +17,7 @@ app.use(cors({origin: 'http://localhost:3003', credentials: true}));
  app.use("/product",productController);
  app.use("/user",userController);
 app.use("/",cartController)
-app.use("/add-to-wishlist",wishListController);
+app.use("/",wishListController);
 
 
 module.exports  = app;

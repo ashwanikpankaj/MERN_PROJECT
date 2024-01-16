@@ -4,8 +4,8 @@ import Button from "@mui/material/Button";
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton'
 
-const CartCard = ({item}) => {
-  const {image,name,price}  = item
+const CartCard = ({item,onRemoveFromCart,onAddToCart}) => {
+  const {image,name,price,count,_id}  = item
   const renderItemSection = () => {
     return (
      <Stack direction="row" justifyContent="center" alignItems="center">
@@ -31,9 +31,9 @@ const CartCard = ({item}) => {
   const renderQuantitySection = () => {
     return (
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <IconButton color="primary" size="large">-</IconButton>
-        <Typography>5</Typography>
-        <IconButton color="primary" size="large">+</IconButton>
+        <IconButton color="primary" size="large" onClick={()=>onRemoveFromCart(_id)}>-</IconButton>
+        <Typography>{count}</Typography>
+        <IconButton color="primary" size="large" onClick={()=>onAddToCart(item)}>+</IconButton>
       </Stack>
     );
   };
@@ -41,7 +41,7 @@ const CartCard = ({item}) => {
   const totalSection = () => {
     return (
       <Stack direction="row" >
-        <Typography style={{marginTop:'5px'}}>{5*price}</Typography>
+        <Typography style={{marginTop:'5px'}}>{count*price}</Typography>
         <Button>Remove</Button>
       </Stack>
     );

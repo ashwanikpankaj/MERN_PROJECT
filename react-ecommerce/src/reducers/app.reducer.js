@@ -47,9 +47,21 @@ export const addToCart  = createAsyncThunk('cartAdd',async(payload)=>{
    return cart
 })
 
+export const decreasItemCartCountAction = createAsyncThunk('decreasItemCartCount',async(payload)=>{
+  await axios.post(`${initURL}/cart-decrease-count`,payload);
+  const cart  = await getCartAndWishList(payload?.userId)
+   return cart
+})
+
 export const addToWishList  = createAsyncThunk('wishListAdd',async(payload)=>{
   await axios.post(`${initURL}/add-to-wishlist`,payload);
    const cart  = await getCartAndWishList(payload?.userId)
+   return cart
+})
+
+export const wishListRemoveAction = createAsyncThunk('wishListRemove',async(payload)=>{
+  await axios.post(`${initURL}/wishlist-remove`,payload);
+  const cart  = await getCartAndWishList(payload?.userId)
    return cart
 })
 
@@ -122,6 +134,18 @@ const appReducer = createSlice({
            state.wishListData = wishList;
         },
         [getCartAndWishListAction.fulfilled]:(state,action)=>{
+          const {payload} = action;
+          const {wishList = {},cartList = {}} = payload;
+          state.cartData = cartList ;
+           state.wishListData = wishList;
+        },
+        [decreasItemCartCountAction.fulfilled]:(state,action)=>{
+          const {payload} = action;
+          const {wishList = {},cartList = {}} = payload;
+          state.cartData = cartList ;
+           state.wishListData = wishList;
+        },
+        [wishListRemoveAction.fulfilled]:(state,action)=>{
           const {payload} = action;
           const {wishList = {},cartList = {}} = payload;
           state.cartData = cartList ;

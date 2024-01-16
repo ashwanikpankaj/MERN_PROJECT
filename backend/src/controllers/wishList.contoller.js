@@ -4,7 +4,7 @@ const WishList = require('../models/wishList.model');
 const Cart = require('../models/cart.model');
 const CommonHelpers = require("../helpers/common.helpers");
 
-router.post('/',async(req,res)=>{
+router.post('/add-to-wishlist',async(req,res)=>{
   try{
     const {userId,products:productsInBody} = req.body;
     const wishListItem  = await WishList.findOne({userId});
@@ -24,5 +24,24 @@ router.post('/',async(req,res)=>{
     return res.status(500).send({message:err,status:500})
   }
 })
+
+
+router.post("/wishlist-remove", async (req, res) => {
+  try {
+    const { productId, userId } = req.body;
+    const { products } = await WishList.findOne({ userId }).lean();
+    const filteredProduct = products.filter(item=>item?._id !==productId)
+    const updateProduct = await WishList.findOneAndUpdate(
+      { userId },
+      { $set: { products: filteredProduct } },
+      { new: true, useFindAndModify: false }
+    );
+    return res.status(200).send({ products: updateProduct });
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: "Something went wrong", status: 500 });
+  }
+});
 
 module.exports = router

@@ -1,13 +1,24 @@
-import { useCallback } from "react";
+import { useCallback,useEffect } from "react";
 import { useSelector ,useDispatch} from "react-redux";
+import {useNavigate} from 'react-router-dom';
+import _isEmpty from 'lodash/isEmpty';
+
 import Stack from "@mui/material/Stack";
 
 import MyCard from "../../molecules/card/Card";
-import { addToCart } from "../../reducers/app.reducer";
+import { addToCart, wishListRemoveAction } from "../../reducers/app.reducer";
 
 const WishList = () => {
   const { wishListData,user } = useSelector((state) => state?.ecommerceReducer);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    console.log('called',wishListData)
+    if(_isEmpty(wishListData?.products)){
+      navigate("/")
+    }
+  },[wishListData])
 
   const onAddToCart = useCallback(
     async (selectedProduct) => {
@@ -16,6 +27,10 @@ const WishList = () => {
     },
     [dispatch, user?.userId]
   );
+
+  const onWishListRemove = useCallback((productId)=>{
+    dispatch(wishListRemoveAction({userId:user?.userId,productId}))
+  },[dispatch,user]);
 
   return (
     <Stack
@@ -28,7 +43,7 @@ const WishList = () => {
       mt={3}
     >
       {wishListData?.products?.map((item) => (
-        <MyCard item={item} isRemoveFromWishList user={user} onAddToCart={onAddToCart}/>
+        <MyCard item={item} isRemoveFromWishList user={user} onAddToCart={onAddToCart} onWishListRemove={onWishListRemove}/>
       ))}
     </Stack>
   );

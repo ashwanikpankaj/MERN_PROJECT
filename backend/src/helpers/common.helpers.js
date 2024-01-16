@@ -22,4 +22,15 @@ const updateItemCountIfPresent = (products = [], newAddedProducts = []) => {
   return isPresent? allProducts:[...products,{...newProduct,count:1}];
 };
 
-module.exports = {getNewToken, updateItemCountIfPresent}
+const decreaseItemCount = (products=[],productToRemoveId)=>{
+  const productWithDecreasedCount  = products.map(item=>{
+    if(item?._id === productToRemoveId){
+      return {...item,count : item?.count-1}
+    }
+    return item;
+  })
+  const filteredProduct  = productWithDecreasedCount.filter(item=>item?.count>0);
+  return filteredProduct
+}
+
+module.exports = {getNewToken, updateItemCountIfPresent, decreaseItemCount}

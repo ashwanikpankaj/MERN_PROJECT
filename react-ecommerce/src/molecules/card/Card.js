@@ -20,9 +20,10 @@ export default function MyCard({
   onAddToWishList,
   user,
   isRemoveFromWishList = false,
+  onWishListRemove
 }) {
   const isLoggedIn = !_isEmpty(user);
-  const { name, price, rating, size, image } = item;
+  const { name, price, rating, size, image,_id } = item;
   const handleAddToCart = (selectedProduct) => () => {
     onAddToCart(selectedProduct);
   };
@@ -54,7 +55,7 @@ export default function MyCard({
             <FavoriteIcon color={isLoggedIn && !isRemoveFromWishList ? "error" : ""}/>
           </Button>
           {isRemoveFromWishList && <Tooltip title="Remove from wishlist">
-            <CloseIcon sx={{mt:0.5,cursor:"pointer"}} color="error" />
+            <CloseIcon sx={{mt:0.5,cursor:"pointer"}} color="error" onClick={()=>onWishListRemove(_id)}/>
             </Tooltip>}
         </Stack>
         <Button
