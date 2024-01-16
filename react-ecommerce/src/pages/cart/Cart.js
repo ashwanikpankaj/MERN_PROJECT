@@ -43,13 +43,14 @@ const Cart = () => {
   }, []);
 
   const onPlaceOrder = useCallback(() => {
+    // dispatch(pl)
     setVisiblePlaceOrder(false);
     setOpenSuccessfullDialog(true)
     setTimeout(()=>{
       setOpenSuccessfullDialog(false);
       navigate("/")
     },1000)
-  }, [navigate]);
+  }, [navigate,dispatch]);
   
   const onRemoveFromCart = useCallback((productId)=>{
    dispatch(cartRemoveAction({userId:user?.userId,productId}))
@@ -131,6 +132,8 @@ const Cart = () => {
   );
 
   const renderSuccessFullDialog = ()=><SuccessFullDialog isOpenSuccessDialog={isOpenSuccessDialog}/>
+
+
 
   return (
     <Box sx={{ paddingRight: "5px", paddingLeft: "5px" }}>

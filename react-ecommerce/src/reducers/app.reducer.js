@@ -9,6 +9,8 @@ const initialState = {
   products: {},
   cartData: {},
   wishListData: {},
+  userAddress:null,
+  userOrder:null
 };
 
 export const login = createAsyncThunk("login", async (payload) => {
@@ -82,6 +84,31 @@ export const getCartAndWishListAction  = createAsyncThunk('cartAndWishList',asyn
   return res
 })
 
+export const addAdressAction = createAsyncThunk('addAdress',async(payload)=>{
+  const res = await axios.post(`${initURL}/address`,payload);
+  return res?.data
+})
+
+export const getAddressAction = createAsyncThunk('userAddress',async(userId)=>{
+  const res = await axios.get(`${initURL}/address/${userId}`);
+  return res?.data
+})
+
+export const updateAddressAction = createAsyncThunk('userAddress',async(payload)=>{
+  const res = await axios.post(`${initURL}/update-address`,payload);
+  return res?.data
+})
+
+export const placeOrdeAction = createAsyncThunk("placeOrder",async(payload)=>{
+  const res = await axios.post(`${initURL}/place-order`,payload);
+  return res?.data
+})
+
+export const getUserOrderAction = createAsyncThunk("getMyOder",async(userId)=>{
+  const res = await axios.get(`${initURL}/my-order/${userId}`);
+  return res?.data
+})
+
 const updateCartAndWishlist = (state,action)=>{
   const {payload} = action;
   const {wishList = {},cartList = {}} = payload;
@@ -151,6 +178,26 @@ const appReducer = createSlice({
         },
         [wishListRemoveAction.fulfilled]:(state,action)=>{
           updateCartAndWishlist(state,action)
+        },
+        [addAdressAction.fulfilled]:(state,action)=>{
+          const {payload} =action;
+          state.userAddress = payload;
+        },
+        [getAddressAction.fulfilled]:(state,action)=>{
+          const {payload} =action;
+          state.userAddress = payload; 
+        },
+        [placeOrdeAction.fulfilled]:(state,action)=>{
+          const {payload} =action;
+          state.userOrder = payload; 
+        },
+        [getUserOrderAction.fulfilled]:(state,action)=>{
+          const {payload} =action;
+          state.userOrder = payload; 
+        },
+        [updateAddressAction.fulfilled]:(state,action)=>{
+          const {payload} =action;
+          state.userAddress = payload; 
         }
       },
 });
