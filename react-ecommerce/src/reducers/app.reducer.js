@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+
 const initURL = "https://apiecommerce-bz4f.onrender.com";
 
 const initialState = {
