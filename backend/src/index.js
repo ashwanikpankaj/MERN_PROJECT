@@ -33,6 +33,10 @@ app.use("/", wishListController);
 app.use("/", addressController);
 app.use("/", myOrderController);
 
+app.get('/home', (req, res) => {
+    res.status(200).json('Welcome, your app is working well');
+  })
+
 const port = process.env.PORT_NUMBER || 8000;
 
 app.listen(port,async ()=>{
