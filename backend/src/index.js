@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json({ extended: false }));
 app.use(
   cors({
-    origin: ["https://deploy-mern-1whq.vercel.app"],
+    origin: ["https://mernprojectfrontend-six.vercel.app/"],
     methods: ["POST", "GET", "PATCH", "DELETE"],
     credentials: true,
   })

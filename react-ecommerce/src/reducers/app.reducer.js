@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initURL = "http://localhost:8000";
+const initURL = "https://apiecommerce-bz4f.onrender.com";
 
 const initialState = {
   user: {},
