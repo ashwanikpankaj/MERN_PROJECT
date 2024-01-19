@@ -14,14 +14,33 @@ const myOrderController = require("./controllers/myOrder.controllers");
 const app = express();
 
 app.use(express.json({ extended: false }));
-app.use(
-  cors({
-    origin: ["https://mernprojectfrontend-six.vercel.app/"],
-    methods: ["POST", "GET", "PATCH", "DELETE"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["https://mernprojectfrontend-six.vercel.app/"],
+//     methods: ["POST", "GET", "PATCH", "DELETE"],
+//     credentials: true,
+//   })
+// );
 //app.use(cors({origin: 'http://localhost:3003', credentials: true}));
+
+const corsOptions = {
+  origin: 'https://mernprojectfrontend-six.vercel.app/',
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://mernprojectfrontend-six.vercel.app/');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
+
+
 
 app.use("/", productController);
 app.use("/create", productController);
