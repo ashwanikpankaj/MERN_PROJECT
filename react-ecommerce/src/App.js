@@ -38,6 +38,7 @@ function App() {
   }, [user?.userId]);
 
   return (
+    <div style={{width:"100%",height:"100vh",overflow:"hidden"}}>
     <BrowserRouter>
       <Navbar
         cartData={cartData?.products}
@@ -50,6 +51,7 @@ function App() {
         <Route path="/my-order" element={<MyOrder />} />
       </Routes>
     </BrowserRouter>
+    </div>
   );
 }
 

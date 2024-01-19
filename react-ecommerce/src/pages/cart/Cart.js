@@ -136,11 +136,14 @@ const Cart = () => {
   const renderSuccessFullDialog = ()=><SuccessFullDialog isOpenSuccessDialog={isOpenSuccessDialog}/>
 
 
+  const heightOfCart = `calc(100vh - 20%)`
 
   return (
-    <Box sx={{ paddingRight: "5px", paddingLeft: "5px" }}>
+    <Box sx={{ paddingRight: "5px", paddingLeft: "5px",height:heightOfCart}}>
+      <div style={{height:"70%",overflow:"auto"}}>
       {renderHeading()}
       {renderCard()}
+      </div>
       {renderTotalAndAddress()}
       {renderCheckoutButton()}
       {renderPlaceOrder()}

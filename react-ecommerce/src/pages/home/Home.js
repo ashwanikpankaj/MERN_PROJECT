@@ -147,10 +147,11 @@ const Home = () => {
   };
 
   const renderAllProducts = () => {
+    const remainingHeight = `calc(100vh - 400px)`;
     return isFetching ? (
       renderFetchingCircle()
     ) : (
-      <div style={{ height: "100%", overflowY: "auto" }}>
+      <div style={{ height: remainingHeight, overflowY: "auto" }}>
         <Stack>
           {_map(products?.categories, (category) => (
             <>{renderSubSection(category)}</>
@@ -162,7 +163,7 @@ const Home = () => {
 
   return (
     <>
-      <div style={{ height: "100vh", width: "100%" }}>
+      <div>
         <ReactSlider />
         <Stack spacing={2} direction="row" style={{ height: "100%" }}>
           <Filter

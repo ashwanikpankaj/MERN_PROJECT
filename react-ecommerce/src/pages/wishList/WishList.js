@@ -40,6 +40,7 @@ const WishList = () => {
   );
 
   return (
+    <div style={{width:"100%",height:"90%",overflow:"auto"}}>
     <Stack
       direction="row"
       flexWrap="wrap"
@@ -62,6 +63,7 @@ const WishList = () => {
         />
       ))}
     </Stack>
+    </div>
   );
 };
 
