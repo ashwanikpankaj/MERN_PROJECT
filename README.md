@@ -10,7 +10,7 @@ i) Navigate to react-ecommerce folder , do npm install and then npm start
 ii) Navigate to backend folder , do npm install and then num run server 
 
 
-Tech Stack: HTML|CSS|JS|REACT|REDUX-TOOLKIT|MUI|NODEJS|EXPRESS|MONGOOSE|MONGODB
+Tech Stack: HTML |CSS |JS |REACT |REDUX-TOOLKIT |MUI |NODEJS |EXPRESS |MONGOOSE |MONGODB
 
 Deployed Link: https://mernprojectfrontend-six.vercel.app/
 
